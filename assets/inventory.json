@@ -1,0 +1,194 @@
+[
+  {
+    "id": "documento-relogio",
+    "originalName": "Documento com relógio de aposentadoria.png",
+    "originalSize": [
+      1536,
+      1024
+    ],
+    "size": [
+      900,
+      600
+    ],
+    "sourceBytes": 980574,
+    "outputBytes": 34010,
+    "hasAlpha": true,
+    "transparent": 465967,
+    "opaque": 3699,
+    "contentBounds": [
+      223,
+      63,
+      671,
+      554
+    ],
+    "sourceSha256": "3326687c5aa40a1836db91e7f11363f529a81847530161068d929b07421cea37"
+  },
+  {
+    "id": "acolhimento",
+    "originalName": "Mãos acolhendo figuras humanas.png",
+    "originalSize": [
+      1536,
+      1024
+    ],
+    "size": [
+      900,
+      600
+    ],
+    "sourceBytes": 1132238,
+    "outputBytes": 64156,
+    "hasAlpha": true,
+    "transparent": 437205,
+    "opaque": 5050,
+    "contentBounds": [
+      151,
+      34,
+      748,
+      580
+    ],
+    "sourceSha256": "d8c52061d42f889274b8fc9628b551e2924bff3c03e86ae03f9650ff2fb09d86"
+  },
+  {
+    "id": "conversa",
+    "originalName": "Balões de conversa jurídica.png",
+    "originalSize": [
+      1536,
+      1024
+    ],
+    "size": [
+      900,
+      600
+    ],
+    "sourceBytes": 1045071,
+    "outputBytes": 54876,
+    "hasAlpha": true,
+    "transparent": 445302,
+    "opaque": 5493,
+    "contentBounds": [
+      140,
+      102,
+      742,
+      518
+    ],
+    "sourceSha256": "8d14ac9900eb3ae349fc6b5914c95e2646393cbac1b38eb6db9099ea78d0fae6"
+  },
+  {
+    "id": "livros-caneta",
+    "originalName": "Livros jurídicos com caneta-tinteiro.png",
+    "originalSize": [
+      1774,
+      887
+    ],
+    "size": [
+      1100,
+      550
+    ],
+    "sourceBytes": 2240008,
+    "outputBytes": 177618,
+    "hasAlpha": true,
+    "transparent": 210864,
+    "opaque": 635,
+    "contentBounds": [
+      57,
+      41,
+      1059,
+      529
+    ],
+    "sourceSha256": "6c051b0020f4ae0d648bdf43fb94725fd508ee976f9cfc7696954811cdd5f5f2"
+  },
+  {
+    "id": "balanca",
+    "originalName": "Balança da justiça em latão envelhecido.png",
+    "originalSize": [
+      1312,
+      1199
+    ],
+    "size": [
+      850,
+      777
+    ],
+    "sourceBytes": 972889,
+    "outputBytes": 152430,
+    "hasAlpha": true,
+    "transparent": 489208,
+    "opaque": 1514,
+    "contentBounds": [
+      18,
+      5,
+      830,
+      766
+    ],
+    "sourceSha256": "07b8e54b2694f067c838a5265b525dfd316b81910ee7f4d689bec61f535530a0"
+  },
+  {
+    "id": "martelo",
+    "originalName": "Martelo de julgamento em nogueira.png",
+    "originalSize": [
+      1774,
+      887
+    ],
+    "size": [
+      1100,
+      550
+    ],
+    "sourceBytes": 1150332,
+    "outputBytes": 93970,
+    "hasAlpha": true,
+    "transparent": 406748,
+    "opaque": 1315,
+    "contentBounds": [
+      32,
+      26,
+      1069,
+      529
+    ],
+    "sourceSha256": "eba4d01d27e39cb06d79b24154cda9fa5e5539500889f217b7548a2ff68e28a7"
+  },
+  {
+    "id": "justica",
+    "originalName": "Justiça em bronze com balança e espada.png",
+    "originalSize": [
+      1024,
+      1536
+    ],
+    "size": [
+      800,
+      1200
+    ],
+    "sourceBytes": 1990036,
+    "outputBytes": 189200,
+    "hasAlpha": true,
+    "transparent": 659412,
+    "opaque": 1756,
+    "contentBounds": [
+      115,
+      60,
+      711,
+      1162
+    ],
+    "sourceSha256": "1f079df0f255b871a423b9b2d7ff779b24f689520960b854fe071fcea414e1f3"
+  },
+  {
+    "id": "conjunto-juridico",
+    "originalName": "Balança jurídica, livros e caneta-tinteiro.png",
+    "originalSize": [
+      1752,
+      897
+    ],
+    "size": [
+      1100,
+      563
+    ],
+    "sourceBytes": 1155604,
+    "outputBytes": 130578,
+    "hasAlpha": true,
+    "transparent": 423647,
+    "opaque": 1609,
+    "contentBounds": [
+      32,
+      34,
+      1073,
+      531
+    ],
+    "sourceSha256": "2b2b84c44c743597b6dcf155357d0de1a3ec1238d41e81bf74c6bb42de74ca53"
+  }
+]

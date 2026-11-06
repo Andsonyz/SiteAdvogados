@@ -13,6 +13,20 @@ export interface Service {
   note: string
 }
 
+export interface MediaAsset { src: string; alt: string; width: number; height: number }
+export interface Review { id: string; author: string; text: string; context?: string }
+
+export const artwork = {
+  retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600 },
+  care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600 },
+  conversation: { src: '/images/conversa.webp', alt: 'Balões de conversa que representam o atendimento online', width: 900, height: 600 },
+  books: { src: '/images/livros-caneta.webp', alt: 'Livros jurídicos em couro e caneta-tinteiro', width: 1100, height: 550 },
+  scales: { src: '/images/balanca.webp', alt: 'Balança da Justiça em latão envelhecido', width: 850, height: 777 },
+  gavel: { src: '/images/martelo.webp', alt: 'Martelo de julgamento em madeira de nogueira', width: 1100, height: 550 },
+  justice: { src: '/images/justica.webp', alt: 'Estátua da Justiça em bronze, com balança e espada', width: 800, height: 1200 },
+  collection: { src: '/images/conjunto-juridico.webp', alt: 'Composição de balança jurídica, livros e caneta-tinteiro', width: 1100, height: 563 },
+} satisfies Record<string, MediaAsset>
+
 interface SiteContent {
   professional: {
     name: string
@@ -31,9 +45,10 @@ interface SiteContent {
   services: Service[]
   attendance: { label: string; title: string; description: string; steps: { title: string; description: string }[] }
   faq: { label: string; title: string; description: string; items: { question: string; answer: string }[]; disclaimer: string }
+  reviews: { label: string; title: string; empty: string; items: Review[] }
   closing: { label: string; title: string; description: string }
   footer: { rights: string }
-  ui: { skip: string; openMenu: string; closeMenu: string; contact: string; back: string; home: string; notFoundLabel: string; notFoundTitle: string; notFoundText: string; serviceLabel: string; serviceContact: string }
+  ui: { skip: string; openMenu: string; closeMenu: string; contact: string; back: string; home: string; notFoundLabel: string; notFoundTitle: string; notFoundText: string; serviceLabel: string; serviceContact: string; previous: string; next: string; railHint: string; servicesRail: string; reviewsRail: string }
   seo: { title: string; description: string }
 }
 
@@ -44,9 +59,9 @@ export const site: SiteContent = {
     oab: '', // Preencher somente com o registro correto, incluindo UF. Ex.: valor confirmado pela advogada.
     experience: '10 anos',
     location: 'Mossoró/RN',
-    logo: { src: '/images/iara-santos-logo.png', alt: 'Iara Santos — Advocacia Especializada', width: 1363, height: 1154 },
+    logo: { src: '/images/iara-santos-logo.webp', alt: 'Iara Santos — Advocacia Especializada', width: 512, height: 433 },
     portrait: {
-      src: '/images/iara-santos.png', // Retrato original fornecido pela advogada, com canal alfa preservado.
+      src: '/images/iara-santos.webp', // Conversão sem perdas do retrato original; PNG preservado ao lado.
       alt: 'Iara Santos, advogada com atuação em Direito Previdenciário',
       width: 1050,
       height: 1498,
@@ -67,6 +82,7 @@ export const site: SiteContent = {
     { label: 'Áreas de atuação', id: 'atuacao' },
     { label: 'Atendimento', id: 'atendimento' },
     { label: 'Dúvidas', id: 'duvidas' },
+    { label: 'Avaliações', id: 'avaliacoes' },
   ],
   hero: {
     eyebrow: 'Sua história merece atenção',
@@ -144,6 +160,12 @@ export const site: SiteContent = {
     ],
     disclaimer: 'As informações desta seção são gerais. A orientação sobre cada situação depende da análise individual do caso.',
   },
+  reviews: {
+    label: 'Avaliações',
+    title: 'Cada história importa.',
+    empty: 'Ainda não há avaliações publicadas.',
+    items: [], // Adicionar somente relatos reais com autorização. Ver README.
+  },
   closing: {
     label: 'Vamos conversar?', title: 'Sua história é o\nponto de partida.',
     description: 'Entre em contato para tirar dúvidas sobre o atendimento e dar o próximo passo.',
@@ -155,6 +177,8 @@ export const site: SiteContent = {
     notFoundTitle: 'Vamos encontrar o caminho de volta.',
     notFoundText: 'Este endereço não está disponível. Volte à página inicial para conhecer a atuação de Iara Santos ou entre em contato pelo WhatsApp.',
     serviceLabel: 'O que podemos conversar no atendimento', serviceContact: 'Converse sobre a sua situação.',
+    previous: 'Item anterior', next: 'Próximo item', railHint: 'Deslize ou arraste para explorar. Use também as setas do teclado.',
+    servicesRail: 'Áreas de atuação — serviços', reviewsRail: 'Avaliações publicadas',
   },
   seo: {
     title: 'Iara Santos | Advocacia Previdenciária',

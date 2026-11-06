@@ -18,7 +18,7 @@ export default function Header() {
     const onPointer = (event: PointerEvent) => {
       if (!header.current?.contains(event.target as Node)) setOpen(false)
     }
-    const media = window.matchMedia('(min-width: 1024px)')
+    const media = window.matchMedia('(min-width: 1200px)')
     const onResize = () => { if (media.matches) setOpen(false) }
     document.addEventListener('keydown', onKey)
     document.addEventListener('pointerdown', onPointer)

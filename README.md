@@ -19,7 +19,7 @@ npm run build       # TypeScript e build em dist/
 npm run preview     # Prévia local do build
 ```
 
-As versões exatas estão em `package.json` e `package-lock.json`. A interface usa React Router, Tailwind CSS 4, Motion e Lucide React. Cormorant Garamond e Manrope são servidas localmente em WOFF2, via Fontsource, com `font-display: swap`; suas licenças OFL estão nos respectivos pacotes. Nenhuma chamada ao Google Fonts é necessária.
+As versões exatas estão em `package.json` e `package-lock.json`. A interface usa React Router, Tailwind CSS 4, Motion e Lucide React. **Baskervville e Manrope** são servidas localmente em WOFF2, via Fontsource, com `font-display: swap`; suas licenças OFL estão nos respectivos pacotes. O corpo usa 16 px no celular e 17 px nas telas maiores. Nenhuma chamada ao Google Fonts é necessária.
 
 ## Editar conteúdo
 
@@ -30,20 +30,35 @@ O plugin local em `vite.config.ts` também preenche os metadados do HTML e o con
 - `src/components/`: cabeçalho, contato, rodapé, FAQ e elementos compartilhados.
 - `src/pages/`: início, serviços e página de retorno.
 - `src/styles.css`: paleta, tipografia, composição, máscara do retrato e ajustes responsivos.
+- `src/components/DragRail.tsx`: faixa com scroll snap, toque nativo, arraste de mouse e teclado; reutilizada pelos serviços e por avaliações quando houver várias.
+- `src/components/Wave.tsx`: curvas decorativas que assumem a cor exata da seção seguinte.
+- `src/hooks/useReducedMotion.ts`: acompanha mudanças de preferência durante a sessão, desligando profundidade e transições.
 - `public/favicon.svg`: assinatura tipográfica IS provisória, facilmente substituível.
 
 Não existem formulários, envio de e-mail, autenticação, banco de dados, analytics ou armazenamento de dados de visitantes. Os links externos abrem outra aba, com `noopener noreferrer`. O contato é exclusivamente pelo WhatsApp; Instagram é apenas um link para o perfil.
 
 ## Retrato e logotipo
 
-O retrato fornecido foi integrado em `public/images/iara-santos.png` (1050 × 1498 px). O PNG já possuía canal alfa e foi copiado sem modificar seus pixels. O logotipo enviado está em `public/images/iara-santos-logo.png`, com fundo removido pela ferramenta de edição de imagens. Ele aparece na seção Sobre e no rodapé (neste último, com apresentação monocromática por CSS). O cabeçalho conserva a assinatura tipográfica compacta para manter a leitura e os controles confortáveis em telas pequenas.
+O retrato é servido em `public/images/iara-santos.webp` (1050 × 1498 px), convertido **sem perdas**, com o PNG original preservado ao lado. A comparação dos pixels decodificados confirmou zero diferenças de alfa e de cor nos pixels visíveis. O logotipo enviado é servido em `public/images/iara-santos-logo.webp`, com o PNG transparente preservado. Ele aparece em Sobre e no rodapé (neste último, com apresentação monocromática por CSS). O cabeçalho conserva a assinatura tipográfica compacta para manter a leitura e os controles confortáveis em telas pequenas.
 
 1. Salve o retrato fornecido pela advogada em `public/images/iara-santos.webp` (ou `.png`). Preserve o canal alfa e a proporção original.
 2. Em `src/data/site.ts`, preencha `professional.portrait.src` com `/images/iara-santos.webp` e `width`/`height` com as dimensões reais.
-3. O componente troca automaticamente a composição tipográfica pelo retrato. O CSS usa `object-fit: cover`, alinhamento superior e máscara opaca até 74% da altura, com transição para transparência na base e apenas nos extremos laterais. No celular, o retrato fica abaixo do contato, em uma composição de altura limitada. O rosto permanece fora das faixas de transição.
+3. O componente troca automaticamente a composição tipográfica pelo retrato. O CSS usa `object-fit: cover`, alinhamento superior e máscara opaca até 74% da altura, com transição para transparência **somente na base**. No celular, o retrato fica abaixo do contato, em uma composição de altura limitada. O rosto permanece fora da faixa de transição.
 4. Confira rosto, transparência, espaço ao redor e enquadramento em 375, 768 e 1440 px. Ajuste `.portrait-composition` e `.hero-portrait` se necessário, sem alterar rosto, cabelo, expressão ou roupa.
 
-Para futuras substituições, prefira WebP com alfa, exportado do original com boa qualidade e aproximadamente 1000–1400 px de largura. Nesta versão foi mantido o PNG original de aproximadamente 1,6 MB para preservar integralmente a imagem fornecida. Se a URL da imagem falhar, a interface retorna à composição tipográfica. Caminhos, dimensões e textos alternativos de retrato e logo ficam em `src/data/site.ts`.
+Para futuras substituições, prefira WebP com alfa, exportado do original com boa qualidade e aproximadamente 1000–1400 px de largura. Se a URL da imagem falhar, a interface retorna à composição tipográfica. Caminhos, dimensões e textos alternativos de retrato e logo ficam em `src/data/site.ts`.
+
+## Artes jurídicas e referências
+
+As oito novas artes foram examinadas e integradas em seções distintas. Consulte **`docs/image-inventory.md`** para a tabela de cada imagem, decisões de recorte e comparação de transparência. Os originais estão em `assets/originals/`; a captura do site de inspiração está em `assets/references/`, fora do material publicado. Os caminhos e textos alternativos das artes estão no objeto tipado `artwork`, em `src/data/site.ts`.
+
+O comando `node scripts/prepare-assets.mjs` regenera os WebP com Sharp e registra dimensões, alfa, margens e tamanhos em `assets/inventory.json`. O script usa as cópias originais preservadas quando os Downloads não estiverem disponíveis. Oito derivados somam cerca de 0,90 MB, frente a 10,67 MB dos originais.
+
+## Inserir avaliações autorizadas
+
+Edite **`site.reviews.items` em `src/data/site.ts`**. A coleção `Review[]` começa vazia: o site mostra “Ainda não há avaliações publicadas.”, sem estrelas, nomes, contagens, imagens ou setas.
+
+Para cada relato real e autorizado, preencha `id` (identificador único), `author` (nome autorizado) e `text` (relato autorizado). `context` é opcional e só deve trazer informação autorizada. Uma avaliação gera um card estático; várias usam a mesma faixa dos serviços, com controles apenas quando há conteúdo fora da área visível. Não há painel ou coleta de avaliações pelo site.
 
 ## Preencher a OAB
 
@@ -73,10 +88,17 @@ A suíte inicia um Vite local na porta 4173 e verifica:
 - Ausência de rolagem horizontal nas páginas em 375, 768 e 1440 px.
 - Auditoria automatizada axe-core WCAG A/AA nessas larguras e com movimento reduzido.
 - Capturas da abertura e da página completa em `test-results/` (pasta ignorada pelo Git).
+- Arraste com mouse e clique após arraste; cancelamento ao soltar fora da faixa; setas, Home/End e controles ocultos no desktop.
+- Toque horizontal com rolagem vertical disponível, por eventos nativos de toque no Chromium.
+- Avaliações vazias, uma estática e várias na faixa, usando fixtures somente no navegador de teste.
+- Troca da preferência de movimento sem recarregar, profundidade desativada e elevação de cards após a revelação.
+- Fontes locais carregadas, cores exatas das ondas, imagens completas, histórico de navegação e ausência de erros no console.
 
 As verificações automatizadas complementam a inspeção visual, sem substituir uma avaliação humana completa de acessibilidade. Os testes validam os destinos dos links; não enviam mensagens nem abrem conversas reais.
 
-Na entrega inicial: TypeScript e build aprovados; **8 testes Playwright aprovados**, sem violações nas auditorias axe executadas. Capturas do Chromium em 375, 768 e 1440 px foram inspecionadas visualmente. A prévia integrada ao chat estava indisponível. A configuração Vercel está preparada, mas não foi validada em um deploy real, pois publicação não fazia parte desta etapa.
+Na atualização de 06/11/2026: TypeScript e build aprovados; **17 testes Playwright aprovados**, sem violações nas auditorias axe executadas. Não há script de lint configurado. A revisão percorreu a inicial inteira e as duas páginas de serviço em 375, 768 e 1440 px, com capturas do Chromium, sem overflow horizontal, imagens quebradas, respostas HTTP de erro ou erros JavaScript nas rotas examinadas. A revisão independente apontou três falhas de interação, reproduzidas e corrigidas com testes de regressão.
+
+Com o Vite em execução, `node scripts/visual-qa.mjs` gera capturas, comparações de alfa e relatório em `output/qa/final/`. `QA_URL` permite usar a prévia do build em outro endereço local, junto da opção `--skip-alpha` (os originais de comparação não são publicados). As pastas de saída de QA não são publicadas. A configuração Vercel está preparada, mas não foi validada em um deploy real, pois publicação não fazia parte desta etapa. Toque foi verificado por emulação Chromium; não houve teste em aparelho físico nem auditoria humana completa com leitor de tela.
 
 ## Referência do conteúdo jurídico
 
@@ -84,6 +106,6 @@ Os textos fornecidos foram preservados. As informações sobre natureza assisten
 
 ## Pendências
 
-- A foto do escritório e a referência de site não foram usadas nesta atualização; foram integrados o retrato e o logotipo enviados.
+- Não foi localizada uma foto identificável do escritório. A captura de referência foi usada apenas como inspiração e a paleta informada foi mantida.
 - Preencher OAB/UF quando o registro correto for informado.
 - Publicação e verificação em hospedagem real ficam para uma etapa posterior, conforme solicitado.

@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import ServicePage from './pages/ServicePage'
 import NotFound from './pages/NotFound'
+import { useReducedMotion } from './hooks/useReducedMotion'
 
 function NavigationEffects() {
   const { pathname, hash, key } = useLocation()
@@ -35,7 +36,8 @@ function NavigationEffects() {
 }
 
 export default function App() {
-  return <MotionConfig reducedMotion="user"><NavigationEffects /><a className="skip-link" href="#main-content">{site.ui.skip}</a><Header />
+  const reduced = useReducedMotion()
+  return <MotionConfig reducedMotion={reduced ? 'always' : 'never'}><NavigationEffects /><a className="skip-link" href="#main-content">{site.ui.skip}</a><Header />
     <main id="main-content" tabIndex={-1}><Routes>
       <Route path="/" element={<Home />} />
       {site.services.map(service => <Route path={`/${service.slug}`} key={service.slug} element={<ServicePage service={service} />} />)}
