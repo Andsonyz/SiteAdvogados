@@ -31,8 +31,8 @@ export function Reveal({ children, className = '', delay = 0 }: PropsWithChildre
   const reduced = useReducedMotion()
   return <motion.div className={className} initial={false}
     animate={reduced ? { y: 0, opacity: 1 } : undefined}
-    whileInView={reduced ? undefined : { y: [20, 0], opacity: [0.7, 1] }}
-    transition={{ duration: 0.55, delay: reduced ? 0 : delay, ease: 'easeOut' }} viewport={{ once: true, amount: 0.12 }}>
+    whileInView={reduced || delay === 0 ? undefined : { y: [8, 0], opacity: [0.9, 1] }}
+    transition={{ duration: 0.4, delay: reduced ? 0 : delay, ease: 'easeOut' }} viewport={{ once: true, amount: 0.12 }}>
     {children}
   </motion.div>
 }

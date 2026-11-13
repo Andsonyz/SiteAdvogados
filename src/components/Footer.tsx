@@ -1,13 +1,12 @@
 import { ArrowUpRight } from 'lucide-react'
-import { artwork, site, whatsappUrl } from '../data/site'
+import { site, whatsappUrl } from '../data/site'
 import { AttendanceLocations, Brand, Reveal, SectionLabel, WhatsAppLink } from './Shared'
 import { InstagramIcon, WhatsAppIcon } from './SocialIcons'
-import Artwork from './Artwork'
 
 export function Contact() {
   return <section id="contato" className="contact-section section" aria-labelledby="contact-title">
     <div className="shell contact-grid">
-      <Reveal><SectionLabel light>{site.closing.label}</SectionLabel><h2 id="contact-title">{site.closing.title}</h2><p className="section-intro">{site.closing.description}</p><Artwork asset={artwork.collection} className="contact-art" /></Reveal>
+      <Reveal><SectionLabel light>{site.closing.label}</SectionLabel><h2 id="contact-title">{site.closing.title}</h2><p className="section-intro">{site.closing.description}</p></Reveal>
       <Reveal className="contact-details">
         <WhatsAppLink />
         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="contact-phone">{site.contact.phone}<ArrowUpRight size={20} aria-hidden="true" /></a>

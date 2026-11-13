@@ -38,7 +38,7 @@ test('reviews have a real empty state, social brand icons, and an anchor', async
   await expect(instagram).toContainText('@iarasantosadv')
 })
 
-test('all sections, local fonts, images, waves, and history render without errors', async ({ page }) => {
+test('all sections, local fonts, images, and history render without errors', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', error => errors.push(error.message))
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()) })
@@ -57,16 +57,8 @@ test('all sections, local fonts, images, waves, and history render without error
     await img.scrollIntoViewIfNeeded()
     await expect.poll(() => img.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true)
   }
-  const waves = page.locator('main .wave-divider')
-  expect(await waves.count()).toBeGreaterThanOrEqual(6)
-  for (const wave of await waves.all()) {
-    await expect(wave).toHaveAttribute('aria-hidden', 'true')
-    expect(await wave.evaluate(el => getComputedStyle(el).pointerEvents)).toBe('none')
-    expect(await wave.evaluate(el => {
-      const next = el.closest('section')!.nextElementSibling!
-      return getComputedStyle(el.querySelector('svg')!).fill === getComputedStyle(next).backgroundColor
-    })).toBe(true)
-  }
+  await expect(page.locator('main h1')).toHaveCount(1)
+  for (const id of ['sobre', 'atuacao', 'atendimento', 'duvidas', 'avaliacoes', 'contato']) await expect(page.locator(`#${id}`)).toBeAttached()
   await page.locator('#atuacao').scrollIntoViewIfNeeded()
   await page.getByRole('link', { name: 'Conhecer aposentadorias' }).click()
   await expect(page).toHaveURL('/aposentadorias')
@@ -151,18 +143,38 @@ test('a mouse release outside the rail cancels an unfinished gesture', async ({ 
   expect(await viewport.evaluate(el => el.scrollLeft)).toBe(0)
 })
 
-test('changing the OS motion preference stops depth in the current session', async ({ page }) => {
+test('changing the OS motion preference removes transitions while FAQ remains usable', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.goto('/#sobre')
-  const art = page.locator('.about-books')
-  const img = art.locator('img')
-  const box = (await art.boundingBox())!
-  await page.mouse.move(box.x + box.width - 10, box.y + box.height - 10)
-  await expect.poll(() => img.evaluate(el => getComputedStyle(el).transform)).not.toBe('none')
+  await page.goto('/#duvidas')
+  const card = page.locator('.service-card').first()
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.mouse.move(box.x + 10, box.y + 10)
-  await expect.poll(() => img.evaluate(el => getComputedStyle(el).transform)).toBe('none')
+  await expect.poll(() => card.evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s')
+  const question = page.getByRole('button', { name: 'O BPC é uma aposentadoria?' })
+  await question.focus()
+  await page.keyboard.press('Enter')
+  await expect(question).toHaveAttribute('aria-expanded', 'true')
+})
+
+test('contact number uses the loaded Manrope font and remains legible at each target width', async ({ page }) => {
+  for (const width of [360, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/#contato')
+    const number = page.locator('.contact-phone')
+    await expect(number).toContainText('(84) 98136-3772')
+    const style = await number.evaluate(async el => {
+      await document.fonts.ready
+      const css = getComputedStyle(el)
+      const bounds = el.getBoundingClientRect()
+      return { family: css.fontFamily, weight: css.fontWeight, loaded: document.fonts.check('600 24px "Manrope Variable"', '(84) 98136-3772'), visible: bounds.left >= 0 && bounds.right <= innerWidth, href: (el as HTMLAnchorElement).href }
+    })
+    expect(style.family).toContain('Manrope')
+    expect(style.weight).toBe('600')
+    expect(style.loaded && style.visible).toBe(true)
+    const url = new URL(style.href)
+    expect(url.origin + url.pathname).toBe('https://wa.me/5584981363772')
+    expect(url.searchParams.get('text')).toBe('Olá, Iara! Conheci seu site e gostaria de informações sobre o atendimento.')
+  }
 })
 
 test('service cards elevate after their reveal and stay steady during drag', async ({ page }) => {

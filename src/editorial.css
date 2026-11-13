@@ -1,0 +1,195 @@
+/* Iara Santos: a restrained editorial system inspired by correspondence and the existing signature. */
+:root { --editorial-rule: #96796575; --editorial-paper: #f4ede3; --editorial-ink: #35251f; --editorial-accent: #8b5332; }
+
+body { color: var(--editorial-ink); }
+.section { padding-block: clamp(78px, 8vw, 120px); }
+.site-header { background: #35251f; border-color: #f4ede32b; backdrop-filter: none; }
+.header-inner { min-height: 90px; }
+.brand-name { font-size: 26px; }
+.brand-specialty { color: #e6d4c3; font-size: 10px; letter-spacing: .02em; }
+.navigation { gap: 25px; font-size: 13px; }
+.button { border-radius: 2px; border-color: transparent; min-height: 54px; }
+.button-header { border: 1px solid #c79b75; border-radius: 2px; background: transparent; }
+.menu-toggle { border-radius: 2px; }
+.eyebrow { color: #795039; letter-spacing: .11em; font-size: 11px; }
+.eyebrow-light { color: #e5c3a0; }
+.eyebrow > span { width: 32px; }
+h2 { line-height: 1.15; }
+.section-intro { line-height: 1.85; }
+
+/* Hero: a single architectural plane gives the transparent portrait a setting. */
+.hero { background: linear-gradient(115deg, #2d201c 0%, #35251f 52%, #493027 100%); padding: 0; }
+.hero-layout { display: flex; flex-direction: column; justify-content: space-between; min-height: 710px; padding-top: 99px; padding-bottom: 38px; }
+.hero-copy { width: 55%; max-width: 645px; padding-bottom: 65px; }
+.hero h1 { font-size: clamp(75px, 7.2vw, 104px); letter-spacing: -.035em; }
+.hero-specialty { color: #e4c7aa; font-size: 15px; }
+.hero-description { max-width: 435px; margin-block: 38px 30px; font-size: 20px; line-height: 1.65; }
+.hero-actions .locations { margin-top: 27px; }
+.portrait-composition { top: 0; bottom: 0; width: 54%; right: calc(50% - 50vw); }
+.portrait-composition::before { content: ''; position: absolute; inset: 0 0 0 35%; background: linear-gradient(135deg, #805640 0%, #704b3b 48%, #493027 100%); }
+.hero-portrait { z-index: 1; object-position: center top; mask-image: linear-gradient(to bottom, #000 0%, #000 84%, transparent 100%); }
+.hero-bottom { padding: 18px 0 0; border-top: 1px solid #e6d4c355; align-items: flex-end; }
+.experience { padding: 0; border: 0; border-radius: 0; background: transparent; gap: 12px; align-items: baseline; }
+.experience > span:first-child { font-size: 30px; }
+.experience > span:last-child { font-size: 12px; }
+.discover-link { color: #ead8c7; }
+
+/* Profile: the copy and signature sit on the page, rather than in a panel. */
+.about-section { background: linear-gradient(135deg, #f7f1e9 0%, #f4ede3 60%, #eee3d5 100%); }
+.about-grid { grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: clamp(58px,8vw,120px); }
+.about-heading { display: block; }
+.about-side-note { color: #765f50; font-size: 12px; line-height: 1.8; margin-top: 36px; }
+.about-copy { padding: 0; border: 0; border-radius: 0; background: transparent; color: #51443c; font-size: 17px; line-height: 1.9; }
+.about-copy > p + p { margin-top: 22px; }
+.about-signoff { margin-top: 36px; padding-top: 25px; border-color: var(--editorial-rule); grid-template-columns: 88px 1fr; }
+.about-logo { width: 88px; }
+.about-signoff p { color: #6c4b38; }
+
+/* Areas are an index of two real services; the touch rail remains available when needed. */
+.areas-section { color: #35251f; background: linear-gradient(120deg, #e8dbcc 0%, #eee5da 65%, #e7dacb 100%); }
+.areas-section .shell { display: grid; grid-template-columns: minmax(0,.84fr) minmax(0,1.35fr); gap: clamp(45px,7vw,105px); align-items: start; }
+.areas-section .section-heading { display: block; margin: 0; }
+.areas-section .section-intro { color: #58483e; max-width: 320px; margin-top: 26px; }
+.rail-viewport { padding: 7px 5px 16px; }
+.service-card { border: 0; border-top: 1px solid #78594399; border-radius: 0; background: transparent; overflow: visible; }
+.service-card:focus-within { border-color: #5c3827; transform: translateY(-3px); }
+.service-card-visual { height: auto; overflow: visible; background: transparent; padding-top: 23px; }
+.service-number { position: static; color: #83583e; font-family: var(--font-serif); font-size: 25px; font-weight: 400; }
+.service-card-copy { padding: 39px 18px 12px 0; }
+.service-category { color: #795039; font-size: 11px; letter-spacing: .06em; }
+.service-card h3 { font-size: clamp(27px,2.4vw,34px); line-height: 1.2; margin-block: 18px; }
+.service-description { color: #51443c; margin-bottom: 26px; }
+.service-card .text-link { color: #613c28; border-color: #9a6b4f; }
+.rail-tools p, .reviews-rail .rail-tools p { color: #59473b; }
+.rail-buttons button { border-color: #906748; border-radius: 0; }
+@media (hover: hover) and (pointer: fine) { .service-card:hover { transform: translateY(-3px); border-color: #5c3827; } }
+
+/* A numbered sequence replaces three matching boxes. */
+.attendance-section { background: linear-gradient(145deg, #f7f1e9 0%, #f4ede3 70%, #eee4d8 100%); }
+.attendance-heading { grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); align-items: end; margin-bottom: 55px; }
+.attendance-heading .section-intro { margin-top: 0; justify-self: end; }
+.steps-grid { gap: 34px; }
+.step-card { padding: 22px 0 0; border: 0; border-top: 1px solid var(--editorial-rule); border-radius: 0; background: transparent; display: grid; grid-template-columns: 42px 1fr; gap: 14px; }
+.step-top { align-items: flex-start; }
+.step-top span { font-size: 22px; }
+.steps-grid h3 { margin: 0; font-size: 16px; }
+.steps-grid p { margin-top: 13px; }
+.attendance-bottom { border: 0; border-top: 1px solid var(--editorial-rule); border-radius: 0; padding: 28px 0 0; margin-top: 49px; }
+
+/* Questions and reviews use ruled text, reserving the darker surface for contact. */
+.faq-section { background: linear-gradient(120deg, #e8dbcc 0%, #eee5da 100%); }
+.faq-grid { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: clamp(45px,7vw,100px); }
+.faq-grid > div:first-child { display: block; }
+.faq-list { display: block; border-bottom: 1px solid #987f6c8a; }
+.faq-item, .faq-item.is-open { border: 0; border-top: 1px solid #987f6c8a; border-radius: 0; background: transparent; }
+.faq-item button { padding: 22px 2px; }
+.faq-answer { padding: 0 30px 25px 2px; }
+.faq-indicator { color: #6c452f; }
+.reviews-section { background: #f4ede3; padding-block: 64px; }
+.reviews-heading { gap: 30px; }
+.reviews-empty { border: 0; border-left: 1px solid var(--editorial-rule); border-radius: 0; padding: 8px 0 8px 27px; }
+.review-card { border-radius: 0; background: transparent; }
+
+/* Contact: Manrope's lining, tabular numerals make the WhatsApp number easy to scan. */
+.contact-section { background: linear-gradient(120deg, #2d201c 0%, #35251f 58%, #493027 100%); color: #f4ede3; }
+.contact-grid { grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); align-items: start; gap: clamp(55px,8vw,120px); }
+.contact-section .section-intro { max-width: 390px; }
+.contact-details { padding: 2px 0 0 36px; border: 0; border-left: 1px solid #c49a776e; border-radius: 0; background: transparent; }
+.contact-phone { font-family: var(--font-sans); font-size: clamp(23px,2.1vw,30px); font-weight: 600; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum' 1, 'tnum' 1; letter-spacing: .015em; line-height: 1.35; white-space: nowrap; margin-block: 29px; }
+.instagram-link { margin-top: 28px; }
+.site-footer { background: #291e19; }
+.brand-logo { width: 115px; }
+.footer-professional { font-size: 12px; }
+.floating-contact { box-shadow: none; }
+
+/* Service pages retain their links and copy while using the same numbered editorial index. */
+.service-hero { background: linear-gradient(115deg, #2d201c 0%, #35251f 55%, #493027 100%); }
+.service-hero-grid { grid-template-columns: minmax(0,1fr) minmax(170px,.35fr); align-items: end; }
+.service-hero-index { align-self: stretch; display: flex; align-items: flex-end; justify-content: flex-end; gap: 22px; color: #d8b08c; border-left: 1px solid #c49a776e; padding-left: 32px; }
+.service-hero-index span { font: 400 clamp(100px,12vw,165px)/.9 var(--font-serif); }
+.service-hero-index i { width: 55px; height: 1px; background: currentColor; margin-bottom: 13px; }
+.service-body { padding-bottom: 80px; }
+.service-aside { border: 0; border-left: 1px solid var(--editorial-rule); border-radius: 0; background: transparent; padding: 0 0 0 32px; }
+.other-service { border-top: 1px solid var(--editorial-rule); padding-top: 30px; }
+
+@media (max-width: 1199px) {
+  .header-inner { min-height: 84px; }
+  .navigation { background: #35251f; }
+  .floating-contact { top: 20px; }
+  .about-grid { gap: 45px; }
+  .about-copy { padding: 0; }
+  .contact-details { padding: 0 0 0 30px; }
+}
+@media (max-width: 899px) {
+  .section { padding-block: 82px; }
+  .hero-layout { min-height: 650px; padding-top: 75px; }
+  .hero-copy { width: 58%; }
+  .hero h1 { font-size: clamp(55px,8vw,72px); }
+  .portrait-composition { width: 53%; top: 0; bottom: 0; }
+  .about-grid { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 40px; }
+  .about-heading { display: block; }
+  .areas-section .shell { grid-template-columns: 1fr; gap: 42px; }
+  .areas-section .section-heading { display: flex; flex-direction: row; justify-content: space-between; align-items: end; gap: 35px; }
+  .areas-section .section-intro { max-width: 275px; }
+  .faq-grid { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 40px; }
+  .faq-grid > div:first-child { display: block; }
+  .contact-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 35px; }
+  .contact-grid > div:first-child { padding-right: 0; }
+  .contact-details { padding-left: 25px; }
+  .service-hero-grid { grid-template-columns: minmax(0,1fr) minmax(120px,.3fr); }
+}
+@media (max-width: 639px) {
+  .section { padding-block: 68px; }
+  .header-inner { min-height: 78px; }
+  .brand-name { font-size: 24px; }
+  .brand-specialty { font-size: 9px; }
+  .floating-contact { top: 17px; right: 80px; }
+  .hero-layout { min-height: auto; padding-top: 38px; padding-bottom: 28px; }
+  .hero-copy { width: 100%; padding-bottom: 18px; }
+  .hero h1 { font-size: clamp(48px,12.7vw,65px); }
+  .hero-specialty { font-size: 13px; }
+  .hero-description { max-width: 320px; margin-block: 25px 23px; font-size: 17px; }
+  .hero-actions .locations { font-size: 12px; margin-top: 19px; }
+  .portrait-composition { position: relative; inset: auto; width: 100%; height: 300px; margin-top: 16px; }
+  .portrait-composition::before { left: 38%; right: -22px; }
+  .hero-bottom { margin-top: 14px; padding-top: 17px; gap: 15px; }
+  .experience { flex-direction: row; align-items: baseline; padding: 0; gap: 8px; }
+  .experience > span:first-child { font-size: 22px; white-space: nowrap; }
+  .experience > span:last-child { font-size: 10px; }
+  .discover-link { max-width: 145px; font-size: 11px; gap: 10px; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .about-side-note { margin-top: 22px; font-size: 12px; }
+  .about-copy { font-size: 16px; line-height: 1.85; }
+  .about-signoff { grid-template-columns: 78px 1fr; gap: 17px; }
+  .about-logo { width: 78px; }
+  .areas-section .shell { display: block; }
+  .areas-section .section-heading { display: block; margin-bottom: 35px; }
+  .areas-section .section-intro { max-width: 100%; margin-top: 21px; }
+  .service-card-visual { padding-top: 18px; }
+  .service-card-copy { padding: 26px 18px 14px 0; }
+  .service-card h3 { font-size: 29px; }
+  .attendance-heading { display: block; margin-bottom: 35px; }
+  .attendance-heading .section-intro { margin-top: 22px; }
+  .steps-grid { grid-template-columns: 1fr; gap: 20px; }
+  .step-card { grid-template-columns: 42px 1fr; padding: 20px 0 0; gap: 13px; }
+  .steps-grid h3 { margin: 0; }
+  .attendance-bottom { align-items: flex-start; padding: 24px 0 0; gap: 22px; }
+  .faq-grid { grid-template-columns: 1fr; gap: 32px; }
+  .faq-grid > div:first-child { display: block; }
+  .faq-grid .section-intro { margin-top: 18px; }
+  .faq-item button { padding: 20px 2px; }
+  .faq-answer { padding: 0 18px 22px 2px; }
+  .reviews-section { padding-block: 55px; }
+  .reviews-heading { gap: 17px; }
+  .reviews-empty { padding: 4px 0 4px 18px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 38px; }
+  .contact-details { padding: 0; border: 0; }
+  .contact-details .button { font-size: 13px; padding-inline: 19px; }
+  .contact-phone { font-family: var(--font-sans); font-size: clamp(22px, 6vw, 26px); line-height: 1.35; margin-block: 27px; }
+  .contact-details .locations { font-size: 13px; }
+  .footer-top { gap: 24px; }
+  .service-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .service-hero-index { border-left: 0; border-top: 1px solid #c49a776e; padding: 22px 0 0; justify-content: flex-start; }
+  .service-hero-index span { font-size: 75px; }
+  .service-aside { padding: 25px 0 0; border-left: 0; border-top: 1px solid var(--editorial-rule); }
+}

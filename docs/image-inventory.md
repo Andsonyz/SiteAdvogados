@@ -1,5 +1,7 @@
 # Inventário e escolha das imagens — 06/11/2026
 
+> Este inventário registra a distribuição de 06/11/2026. Desde a revisão de 13/11, o retrato e o logotipo permanecem visíveis; as artes jurídicas continuam preservadas, mas não são exibidas na interface. Consulte `direcao-editorial-2026-11-13.md`.
+
 Todos os arquivos de produção abaixo foram abertos individualmente e examinados. Os oito novos originais estão preservados em `assets/originals/`; o retrato e o logo originais continuam em `public/images/*.png`. A captura de inspiração está em `assets/references/`, fora da pasta publicada.
 
 As medidas abaixo são do original. Os derivados WebP, com dimensões reservadas no HTML, estão em `public/images/`. Medidas, tamanhos, SHA-256 e caixa de conteúdo (alfa >16) são reproduzíveis em `assets/inventory.json` por `node scripts/prepare-assets.mjs`. O script usa Sharp somente para conversão e redimensionamento: nenhuma arte nova foi gerada nesta atualização.

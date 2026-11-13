@@ -19,7 +19,7 @@ npm run build       # TypeScript e build em dist/
 npm run preview     # Prévia local do build
 ```
 
-As versões exatas estão em `package.json` e `package-lock.json`. A interface usa React Router, Tailwind CSS 4, Motion e Lucide React. **Baskervville e Manrope** são servidas localmente em WOFF2, via Fontsource, com `font-display: swap`; suas licenças OFL estão nos respectivos pacotes. O corpo usa 16 px no celular e 17 px nas telas maiores. Nenhuma chamada ao Google Fonts é necessária.
+As versões exatas estão em `package.json` e `package-lock.json`. A interface usa React Router, Tailwind CSS 4, Motion e Lucide React. **Baskervville e Manrope** são servidas localmente em WOFF2, via Fontsource, com `font-display: swap`; suas licenças OFL estão nos respectivos pacotes. O corpo usa 16 px no celular e 17 px nas telas maiores. O telefone usa Manrope 600, com algarismos alinhados e tabulares. Nenhuma chamada ao Google Fonts é necessária.
 
 ## Editar conteúdo
 
@@ -29,9 +29,9 @@ O plugin local em `vite.config.ts` também preenche os metadados do HTML e o con
 
 - `src/components/`: cabeçalho, contato, rodapé, FAQ e elementos compartilhados.
 - `src/pages/`: início, serviços e página de retorno.
-- `src/styles.css`: paleta, tipografia, composição, máscara do retrato e ajustes responsivos.
+- `src/styles.css` e `src/editorial.css`: paleta, tipografia, composição, máscara do retrato e ajustes responsivos.
 - `src/components/DragRail.tsx`: faixa com scroll snap, toque nativo, arraste de mouse e teclado; reutilizada pelos serviços e por avaliações quando houver várias.
-- `src/components/Wave.tsx`: curvas decorativas que assumem a cor exata da seção seguinte.
+- `src/components/Wave.tsx`: componente preservado de uma versão anterior; não é usado na composição atual.
 - `src/hooks/useReducedMotion.ts`: acompanha mudanças de preferência durante a sessão, desligando profundidade e transições.
 - `public/favicon.svg`: assinatura tipográfica IS provisória, facilmente substituível.
 
@@ -50,7 +50,7 @@ Para futuras substituições, prefira WebP com alfa, exportado do original com b
 
 ## Artes jurídicas e referências
 
-As oito novas artes foram examinadas e integradas em seções distintas. Consulte **`docs/image-inventory.md`** para a tabela de cada imagem, decisões de recorte e comparação de transparência. Os originais estão em `assets/originals/`; a captura do site de inspiração está em `assets/references/`, fora do material publicado. Os caminhos e textos alternativos das artes estão no objeto tipado `artwork`, em `src/data/site.ts`.
+As oito artes jurídicas permanecem preservadas nos arquivos, mas não são exibidas na composição editorial atual. O retrato e o logotipo fornecidos continuam em uso. Consulte `docs/image-inventory.md` para o inventário histórico e `docs/direcao-editorial-2026-11-13.md` para a justificativa da revisão. Os originais estão em `assets/originals/` e os caminhos tipados permanecem em `src/data/site.ts`.
 
 O comando `node scripts/prepare-assets.mjs` regenera os WebP com Sharp e registra dimensões, alfa, margens e tamanhos em `assets/inventory.json`. O script usa as cópias originais preservadas quando os Downloads não estiverem disponíveis. Oito derivados somam cerca de 0,90 MB, frente a 10,67 MB dos originais.
 
@@ -91,12 +91,12 @@ A suíte inicia um Vite local na porta 4173 e verifica:
 - Arraste com mouse e clique após arraste; cancelamento ao soltar fora da faixa; setas, Home/End e controles ocultos no desktop.
 - Toque horizontal com rolagem vertical disponível, por eventos nativos de toque no Chromium.
 - Avaliações vazias, uma estática e várias na faixa, usando fixtures somente no navegador de teste.
-- Troca da preferência de movimento sem recarregar, profundidade desativada e elevação de cards após a revelação.
-- Fontes locais carregadas, cores exatas das ondas, imagens completas, histórico de navegação e ausência de erros no console.
+- Troca da preferência de movimento sem recarregar e funcionamento do FAQ com movimento reduzido.
+- Fonte e destino do telefone nas quatro larguras, histórico de navegação e ausência de erros no console.
 
 As verificações automatizadas complementam a inspeção visual, sem substituir uma avaliação humana completa de acessibilidade. Os testes validam os destinos dos links; não enviam mensagens nem abrem conversas reais.
 
-Na atualização de 06/11/2026: TypeScript e build aprovados; **17 testes Playwright aprovados**, sem violações nas auditorias axe executadas. Não há script de lint configurado. A revisão percorreu a inicial inteira e as duas páginas de serviço em 375, 768 e 1440 px, com capturas do Chromium, sem overflow horizontal, imagens quebradas, respostas HTTP de erro ou erros JavaScript nas rotas examinadas. A revisão independente apontou três falhas de interação, reproduzidas e corrigidas com testes de regressão.
+Na atualização de 13/11/2026: TypeScript e build aprovados; **18 testes Playwright aprovados**, incluindo as auditorias axe nas larguras configuradas pela suíte (375, 768 e 1440 px). A página inicial e as duas páginas de serviço foram percorridas em Chromium a 360, 390, 768 e 1440 px; não houve rolagem horizontal, imagens quebradas ou erros JavaScript nas combinações examinadas. Não há script de lint configurado.
 
 Com o Vite em execução, `node scripts/visual-qa.mjs` gera capturas, comparações de alfa e relatório em `output/qa/final/`. `QA_URL` permite usar a prévia do build em outro endereço local, junto da opção `--skip-alpha` (os originais de comparação não são publicados). As pastas de saída de QA não são publicadas. A configuração Vercel está preparada, mas não foi validada em um deploy real, pois publicação não fazia parte desta etapa. Toque foi verificado por emulação Chromium; não houve teste em aparelho físico nem auditoria humana completa com leitor de tela.
 
