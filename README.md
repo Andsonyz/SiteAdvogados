@@ -50,7 +50,7 @@ Para futuras substituições, prefira WebP com alfa, exportado do original com b
 
 ## Artes jurídicas e referências
 
-As oito artes jurídicas permanecem preservadas nos arquivos, mas não são exibidas na composição editorial atual. O retrato e o logotipo fornecidos continuam em uso. Consulte `docs/image-inventory.md` para o inventário histórico e `docs/direcao-editorial-2026-11-13.md` para a justificativa da revisão. Os originais estão em `assets/originals/` e os caminhos tipados permanecem em `src/data/site.ts`.
+As oito artes jurídicas voltaram a compor a página inicial e as páginas de serviços, com animações suaves que respeitam a preferência por movimento reduzido. O retrato e o logotipo fornecidos continuam em uso. Os caminhos e textos alternativos estão em `src/data/site.ts`; os originais ficam em `assets/originals/`. Consulte `docs/image-inventory.md` para o inventário.
 
 O comando `node scripts/prepare-assets.mjs` regenera os WebP com Sharp e registra dimensões, alfa, margens e tamanhos em `assets/inventory.json`. O script usa as cópias originais preservadas quando os Downloads não estiverem disponíveis. Oito derivados somam cerca de 0,90 MB, frente a 10,67 MB dos originais.
 

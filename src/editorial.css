@@ -1,7 +1,7 @@
 /* Iara Santos: a restrained editorial system inspired by correspondence and the existing signature. */
 :root { --editorial-rule: #96796575; --editorial-paper: #f4ede3; --editorial-ink: #35251f; --editorial-accent: #8b5332; }
 
-body { color: var(--editorial-ink); }
+body { color: var(--editorial-ink); background: linear-gradient(135deg, #f8f2ea, #f4ede3 60%, #eadccc); }
 .section { padding-block: clamp(78px, 8vw, 120px); }
 .site-header { background: #35251f; border-color: #f4ede32b; backdrop-filter: none; }
 .header-inner { min-height: 90px; }
@@ -114,7 +114,7 @@ h2 { line-height: 1.15; }
 
 @media (max-width: 1199px) {
   .header-inner { min-height: 84px; }
-  .navigation { background: #35251f; }
+  .navigation { background: linear-gradient(135deg, #291d19, #493027); }
   .floating-contact { top: 20px; }
   .about-grid { gap: 45px; }
   .about-copy { padding: 0; }
@@ -192,4 +192,47 @@ h2 { line-height: 1.15; }
   .service-hero-index { border-left: 0; border-top: 1px solid #c49a776e; padding: 22px 0 0; justify-content: flex-start; }
   .service-hero-index span { font-size: 75px; }
   .service-aside { padding: 25px 0 0; border-left: 0; border-top: 1px solid var(--editorial-rule); }
+}
+
+/* Restored artwork adds visual rhythm while keeping text and controls unobstructed. */
+.site-header { background: linear-gradient(110deg, #291d19, #3e2a23 72%, #493027); }
+.reviews-section, .service-body, .not-found { background: linear-gradient(135deg, #f8f2ea, #f4ede3 60%, #eadccc); }
+.site-footer { background: linear-gradient(120deg, #241a17, #30211b 72%, #3b2920); }
+.about-books { width: min(100%, 370px); margin: 38px 0 0; }
+.artwork { position: relative; pointer-events: auto; }
+.artwork img { display: block; }
+.service-card-visual { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; min-height: 165px; }
+.service-card-visual .service-illustration { width: min(78%, 245px); height: 150px; flex: none; }
+.service-card-visual .service-illustration img { height: 100%; object-fit: contain; }
+.service-card-copy { padding-top: 20px; }
+.attendance-illustrated { display: flex; align-items: center; gap: 20px; }
+.attendance-illustrated .section-intro { flex: 1; }
+.attendance-illustrated .conversation-art { width: min(42%, 190px); flex: none; background: transparent; }
+.faq-art { width: min(68%, 240px); margin: 32px auto 0; }
+.contact-art { width: min(100%, 400px); max-width: 400px; margin: 28px 0 0; position: static; }
+.service-hero-grid { grid-template-columns: minmax(0,1fr) minmax(230px,.6fr); }
+.service-hero-index { position: relative; min-height: 320px; align-items: end; }
+.service-hero-index .service-hero-art { position: absolute; inset: 0 10% 35px; display: flex; align-items: center; justify-content: center; }
+.service-hero-index .service-hero-art img { max-height: 100%; width: 100%; }
+.service-hero-index > span, .service-hero-index > i { position: relative; z-index: 1; }
+.service-hero-index > span { font-size: clamp(75px, 9vw, 120px); }
+.service-detail-art { width: min(100%, 390px); margin-top: 28px; }
+@media (max-width: 899px) {
+  .service-hero-grid { grid-template-columns: minmax(0,1fr) minmax(190px,.6fr); }
+  .contact-art { position: static; width: min(100%, 310px); margin: 24px 0 0; }
+}
+@media (max-width: 639px) {
+  .about-books { width: min(80%, 300px); margin: 25px auto 0; }
+  .service-card-visual { min-height: 125px; }
+  .service-card-visual .service-illustration { height: 115px; }
+  .attendance-illustrated { margin-top: 16px; }
+  .attendance-illustrated .section-intro { margin-top: 0; }
+  .attendance-illustrated .conversation-art { width: 36%; max-width: 145px; }
+  .faq-art { width: min(45%, 155px); margin: 20px auto 0; }
+  .contact-art { width: min(85%, 290px); margin: 24px 0 0; }
+  .service-hero-grid { grid-template-columns: 1fr; }
+  .service-hero-index { min-height: 210px; }
+  .service-hero-index .service-hero-art { inset: 10px 10% 5px 25%; }
+  .service-hero-index > span { font-size: 75px; }
+  .service-detail-art { width: min(85%, 300px); }
 }

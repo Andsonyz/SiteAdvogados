@@ -3,7 +3,8 @@ import { motion } from 'motion/react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { site } from '../data/site'
+import { artwork, site } from '../data/site'
+import Artwork from '../components/Artwork'
 import { AttendanceLocations, Reveal, SectionLabel, WhatsAppLink } from '../components/Shared'
 import DragRail from '../components/DragRail'
 import Reviews from '../components/Reviews'
@@ -38,7 +39,7 @@ function Hero() {
 function About() {
   return <section id="sobre" className="section about-section" aria-labelledby="about-title">
     <div className="shell about-grid">
-      <Reveal className="about-heading"><SectionLabel>{site.about.label}</SectionLabel><h2 id="about-title">{site.about.title}</h2><p className="about-side-note">{site.professional.specialty}<br />{site.professional.location} e região</p></Reveal>
+      <Reveal className="about-heading"><SectionLabel>{site.about.label}</SectionLabel><h2 id="about-title">{site.about.title}</h2><p className="about-side-note">{site.professional.specialty}<br />{site.professional.location} e região</p><Artwork asset={artwork.books} className="about-books" depth /></Reveal>
       <Reveal className="about-copy" delay={0.1}>{site.about.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<div className="about-signoff"><img className="about-logo" src={site.professional.logo.src} alt={site.professional.logo.alt} width={site.professional.logo.width} height={site.professional.logo.height} loading="lazy" /><p>{site.about.signature}</p></div></Reveal>
     </div>
   </section>
@@ -49,7 +50,7 @@ function Areas() {
     <div className="shell">
       <Reveal className="section-heading"><div><SectionLabel>{site.areas.label}</SectionLabel><h2 id="areas-title">{site.areas.title}</h2></div><p className="section-intro">{site.areas.description}</p></Reveal>
       <DragRail label={site.ui.servicesRail} className="services-rail">{site.services.map((service, index) => <Reveal key={service.slug} className="service-card-reveal" delay={index * 0.09}><article className="service-card">
-        <div className="service-card-visual"><span className="service-number">{service.number}</span></div>
+        <div className="service-card-visual"><span className="service-number">{service.number}</span><Artwork asset={service.slug === 'aposentadorias' ? artwork.retirement : artwork.care} className="service-illustration" depth /></div>
         <div className="service-card-copy"><p className="service-category">{service.category}</p><h3>{service.shortTitle}</h3><p className="service-description">{service.description}</p><Link className="text-link" to={`/${service.slug}`}>{service.linkLabel}<ArrowUpRight size={20} aria-hidden="true" /></Link></div>
       </article></Reveal>)}</DragRail>
     </div>
@@ -59,7 +60,7 @@ function Areas() {
 function Attendance() {
   return <section id="atendimento" className="section attendance-section" aria-labelledby="attendance-title">
     <div className="shell">
-      <div className="attendance-heading"><Reveal><SectionLabel>{site.attendance.label}</SectionLabel><h2 id="attendance-title">{site.attendance.title}</h2></Reveal><p className="section-intro">{site.attendance.description}</p></div>
+      <div className="attendance-heading"><Reveal><SectionLabel>{site.attendance.label}</SectionLabel><h2 id="attendance-title">{site.attendance.title}</h2></Reveal><div className="attendance-illustrated"><p className="section-intro">{site.attendance.description}</p><Artwork asset={artwork.conversation} className="conversation-art" depth /></div></div>
       <ol className="steps-grid">{site.attendance.steps.map((step, index) => <li key={step.title}><Reveal delay={index * 0.08} className="step-card"><div className="step-top"><span>0{index + 1}</span></div><div className="step-copy"><h3>{step.title}</h3><p>{step.description}</p></div></Reveal></li>)}</ol>
       <Reveal className="attendance-bottom"><AttendanceLocations /><WhatsAppLink className="button-dark" /></Reveal>
     </div>

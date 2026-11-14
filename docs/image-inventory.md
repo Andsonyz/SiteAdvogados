@@ -1,6 +1,6 @@
 # Inventário e escolha das imagens — 06/11/2026
 
-> Este inventário registra a distribuição de 06/11/2026. Desde a revisão de 13/11, o retrato e o logotipo permanecem visíveis; as artes jurídicas continuam preservadas, mas não são exibidas na interface. Consulte `direcao-editorial-2026-11-13.md`.
+> O inventário registra a seleção original. As oito artes foram reintegradas ao site com animações suaves; o retrato e o logotipo permanecem visíveis.
 
 Todos os arquivos de produção abaixo foram abertos individualmente e examinados. Os oito novos originais estão preservados em `assets/originals/`; o retrato e o logo originais continuam em `public/images/*.png`. A captura de inspiração está em `assets/references/`, fora da pasta publicada.
 
