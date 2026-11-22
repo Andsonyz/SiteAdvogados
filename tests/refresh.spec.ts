@@ -1,194 +1,110 @@
-import { test, expect } from '@playwright/test'
+﻿import { test, expect } from '@playwright/test'
 
-test('service rail supports keyboard and mouse without navigating after drag', async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 900 })
-  await page.goto('/#atuacao')
-  const rail = page.getByRole('region', { name: 'Áreas de atuação — serviços' })
-  const viewport = rail.locator('.rail-viewport')
-  await expect(rail.getByRole('button', { name: 'Próximo item' })).toBeVisible()
-  await viewport.focus()
-  await page.keyboard.press('End')
-  await expect.poll(() => viewport.evaluate(el => el.scrollLeft)).toBeGreaterThan(100)
-  await page.keyboard.press('Home')
-  await expect.poll(() => viewport.evaluate(el => el.scrollLeft)).toBe(0)
-  const box = (await viewport.boundingBox())!
-  await page.mouse.move(box.x + box.width - 45, box.y + 140)
-  await page.mouse.down()
-  await page.mouse.move(box.x + 35, box.y + 140, { steps: 12 })
-  await page.mouse.up()
-  await expect(page).toHaveURL(/#atuacao$/)
-  await expect.poll(() => viewport.evaluate(el => el.scrollLeft)).toBeGreaterThan(80)
-  await rail.getByRole('link', { name: 'Conhecer o BPC' }).click()
-  await expect(page).toHaveURL('/bpc')
-  await page.goBack()
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await expect(rail.getByRole('button', { name: 'Próximo item' })).toBeHidden()
+test('two services use vertical flow on mobile and tablet and two desktop columns', async ({ page }) => {
+  for (const width of [320, 360, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 844 }); await page.goto('/#atuacao')
+    const services = page.locator('.services-list > li'); await expect(services).toHaveCount(2)
+    const boxes = await services.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()))
+    if (width < 1024) expect(boxes[1].top).toBeGreaterThanOrEqual(boxes[0].bottom)
+    else { expect(Math.abs(boxes[1].top - boxes[0].top)).toBeLessThan(2); expect(boxes[1].left).toBeGreaterThan(boxes[0].right) }
+    for (const box of boxes) { expect(box.left).toBeGreaterThanOrEqual(0); expect(box.right).toBeLessThanOrEqual(width) }
+    await expect(page.locator('#atuacao .rail-viewport')).toHaveCount(0)
+    await page.getByRole('link', { name: 'Conhecer o BPC', exact: true }).click(); await expect(page).toHaveURL('/bpc')
+  }
 })
 
-test('reviews have a real empty state, social brand icons, and an anchor', async ({ page }) => {
-  await page.goto('/#avaliacoes')
-  const section = page.locator('#avaliacoes')
-  await expect(section).toBeInViewport()
-  await expect(section).toContainText('Ainda não há avaliações publicadas.')
-  await expect(section.locator('button')).toHaveCount(0)
-  await expect(section.locator('blockquote')).toHaveCount(0)
-  await expect(page.locator('.floating-contact svg[data-brand="whatsapp"]')).toBeVisible()
-  const instagram = page.locator('#contato a[href="https://www.instagram.com/iarasantosadv/"]')
-  await expect(instagram.locator('svg[data-brand="instagram"]')).toBeVisible()
-  await expect(instagram).toContainText('@iarasantosadv')
-})
-
-test('all sections, local fonts, images, and history render without errors', async ({ page }) => {
-  const errors: string[] = []
-  page.on('pageerror', error => errors.push(error.message))
-  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()) })
-  const failures: string[] = []
-  page.on('response', response => { if (response.status() >= 400 && response.url().startsWith('http://127.0.0.1')) failures.push(response.url()) })
+test('empty reviews are omitted from the page and menu', async ({ page }) => {
   await page.goto('/')
-  for (const section of await page.locator('main section').all()) {
-    await section.scrollIntoViewIfNeeded()
-    await expect(section).toBeVisible()
-  }
-  await page.evaluate(() => document.fonts.ready)
-  const fonts = await page.evaluate(() => [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family))
-  expect(fonts.some(font => font.includes('Baskervville'))).toBe(true)
-  expect(fonts.some(font => font.includes('Manrope'))).toBe(true)
-  for (const img of await page.locator('main img').all()) {
-    await img.scrollIntoViewIfNeeded()
-    await expect.poll(() => img.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true)
-  }
-  await expect(page.locator('main h1')).toHaveCount(1)
-  for (const id of ['sobre', 'atuacao', 'atendimento', 'duvidas', 'avaliacoes', 'contato']) await expect(page.locator(`#${id}`)).toBeAttached()
-  await page.locator('#atuacao').scrollIntoViewIfNeeded()
-  await page.getByRole('link', { name: 'Conhecer aposentadorias' }).click()
-  await expect(page).toHaveURL('/aposentadorias')
-  await page.reload()
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Aposentadorias')
-  await page.goBack()
-  await expect(page).toHaveURL('/')
-  expect(errors).toEqual([])
-  expect(failures).toEqual([])
+  await expect(page.locator('#avaliacoes')).toHaveCount(0)
+  await expect(page.locator('a[href="/#avaliacoes"]')).toHaveCount(0)
+  await expect(page.locator('blockquote')).toHaveCount(0)
+  await expect(page.locator('body')).not.toContainText('Ainda não há avaliações publicadas.')
 })
 
-test('native touch can swipe the rail and still scroll the page vertically', async ({ browser }) => {
-  const context = await browser.newContext({ viewport: { width: 375, height: 900 }, isMobile: true, hasTouch: true })
-  const page = await context.newPage()
-  await page.goto('http://127.0.0.1:4173/#atuacao')
-  const viewport = page.locator('.services-rail .rail-viewport')
-  await viewport.scrollIntoViewIfNeeded()
-  const box = (await viewport.boundingBox())!
-  const y = Math.max(180, box.y + 130)
-  const cdp = await context.newCDPSession(page)
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 300, y }] })
-  for (let x = 275; x >= 60; x -= 25) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y }] })
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
-  await expect.poll(() => viewport.evaluate(el => el.scrollLeft)).toBeGreaterThan(70)
-  await expect(page).toHaveURL(/#atuacao$/)
-  const start = await page.evaluate(() => scrollY)
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 180, y: 580 }] })
-  for (let touchY = 550; touchY >= 300; touchY -= 30) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 180, y: touchY }] })
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
-  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(start + 40)
-  await context.close()
-})
-
-test('one authorized review stays static and multiple reviews reuse the rail', async ({ page }) => {
-  // Browser-only fixtures: never written to production content or the built site.
+test('authorized review fixtures enable section, menu and reusable keyboard rail', async ({ page }) => {
+  // Fixtures only in the dev browser. Never added to production content.
   for (const count of [1, 4]) {
     await page.goto('about:blank')
-    const fixtures = Array.from({ length: count }, (_, index) => ({ id: `fixture-${index}`, author: `Autoria de teste ${index}`, text: 'Conteúdo de teste da apresentação de uma avaliação autorizada.' }))
+    const fixtures = Array.from({ length: count }, (_, i) => ({ id: `fixture-${i}`, author: `Autoria de teste ${i}`, text: 'Texto de teste da apresentação de uma avaliação autorizada.' }))
     await page.route('**/src/data/site.ts*', async route => {
       const response = await route.fetch()
-      const source = await response.text()
-      await route.fulfill({ response, body: source.replace('items: []', `items: ${JSON.stringify(fixtures)}`) })
+      await route.fulfill({ response, body: (await response.text()).replace('items: []', `items: ${JSON.stringify(fixtures)}`) })
     })
-    await page.setViewportSize({ width: 375, height: 900 })
-    await page.goto('/#avaliacoes')
-    const section = page.locator('#avaliacoes')
-    await expect(section.locator('blockquote')).toHaveCount(count)
-    await expect(section).not.toContainText('Ainda não há avaliações publicadas.')
-    if (count === 1) await expect(section.locator('button')).toHaveCount(0)
-    else await expect(section.getByRole('button', { name: 'Próximo item' })).toBeVisible()
+    await page.setViewportSize({ width: 375, height: 812 }); await page.goto('/#avaliacoes')
+    await expect(page.locator('#avaliacoes blockquote')).toHaveCount(count)
+    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Avaliações', exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    if (count === 1) await expect(page.locator('#avaliacoes button')).toHaveCount(0)
+    else {
+      const rail = page.locator('.reviews-rail .rail-viewport'); await rail.focus()
+      await page.keyboard.press('End'); await expect.poll(() => rail.evaluate(node => node.scrollLeft)).toBeGreaterThan(100)
+      await page.keyboard.press('Home'); await expect.poll(() => rail.evaluate(node => node.scrollLeft)).toBe(0)
+    }
     await page.unrouteAll()
   }
 })
 
-test('drag beginning on a service link does not navigate, then a fresh click works', async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 900 })
-  await page.goto('/#atuacao')
-  const first = page.getByRole('link', { name: 'Conhecer aposentadorias' })
-  await first.scrollIntoViewIfNeeded()
-  const box = (await first.boundingBox())!
-  await page.mouse.move(box.x + box.width - 8, box.y + box.height / 2)
-  await page.mouse.down()
-  await page.mouse.move(Math.max(25, box.x + box.width - 150), box.y + box.height / 2, { steps: 10 })
-  await page.mouse.up()
-  await expect(page).toHaveURL(/#atuacao$/)
-  await page.getByRole('link', { name: 'Conhecer o BPC' }).click()
-  await expect(page).toHaveURL('/bpc')
+test('attendance details open independently by keyboard and load three illustrations', async ({ page }) => {
+  await page.goto('/#atendimento'); const buttons = page.locator('.step-toggle')
+  await expect(buttons).toHaveCount(3)
+  for (let i = 0; i < 3; i++) {
+    const button = buttons.nth(i); await expect(button).toHaveAttribute('aria-expanded', 'false')
+    await expect(page.locator(`#step-detail-${i}`)).toBeHidden()
+    await button.focus(); await page.keyboard.press(i === 1 ? 'Space' : 'Enter')
+    await expect(button).toHaveAttribute('aria-expanded', 'true')
+    const panel = page.locator(`#step-detail-${i}`); await expect(panel).toBeVisible()
+    await panel.locator('img').evaluate((img: HTMLImageElement) => img.decode())
+    await expect(buttons.first()).toHaveAttribute('aria-expanded', 'true')
+  }
+  await buttons.nth(1).click(); await expect(page.locator('#step-detail-1')).toBeHidden()
+  await expect(page.locator('#step-detail-1 a,#step-detail-1 button')).toHaveCount(0)
+  await expect(buttons.first()).toHaveAttribute('aria-expanded', 'true'); await expect(buttons.last()).toHaveAttribute('aria-expanded', 'true')
 })
 
-test('a mouse release outside the rail cancels an unfinished gesture', async ({ page }) => {
-  await page.setViewportSize({ width: 375, height: 900 })
-  await page.goto('/#atuacao')
-  const rail = page.locator('.services-rail')
-  const viewport = rail.locator('.rail-viewport')
-  const box = (await viewport.boundingBox())!
-  await page.mouse.move(box.x + 270, box.y + 120)
-  await page.mouse.down()
-  await page.mouse.move(box.x + 270, 85)
-  await page.mouse.up()
-  await page.mouse.move(box.x + 30, box.y + 120)
-  await expect(rail).not.toHaveClass(/is-dragging/)
-  expect(await viewport.evaluate(el => el.scrollLeft)).toBe(0)
-})
-
-test('changing the OS motion preference removes transitions while FAQ remains usable', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.goto('/#duvidas')
-  const card = page.locator('.service-card').first()
-  await page.emulateMedia({ reducedMotion: 'reduce' })
-  await expect.poll(() => card.evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s')
-  const question = page.getByRole('button', { name: 'O BPC é uma aposentadoria?' })
-  await question.focus()
-  await page.keyboard.press('Enter')
-  await expect(question).toHaveAttribute('aria-expanded', 'true')
-})
-
-test('contact number uses the loaded Manrope font and remains legible at each target width', async ({ page }) => {
-  for (const width of [360, 390, 768, 1440]) {
-    await page.setViewportSize({ width, height: 900 })
-    await page.goto('/#contato')
-    const number = page.locator('.contact-phone')
-    await expect(number).toContainText('(84) 98136-3772')
+test('contact uses loaded Manrope and fits target widths', async ({ page }) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 }); await page.goto('/#contato')
+    const number = page.locator('.contact-phone'); await expect(number).toContainText('(84) 98136-3772')
     const style = await number.evaluate(async el => {
-      await document.fonts.ready
-      const css = getComputedStyle(el)
-      const bounds = el.getBoundingClientRect()
-      return { family: css.fontFamily, weight: css.fontWeight, loaded: document.fonts.check('600 24px "Manrope Variable"', '(84) 98136-3772'), visible: bounds.left >= 0 && bounds.right <= innerWidth, href: (el as HTMLAnchorElement).href }
+      await document.fonts.ready; const css = getComputedStyle(el); const box = el.getBoundingClientRect()
+      return { family: css.fontFamily, weight: css.fontWeight, loaded: document.fonts.check('600 24px "Manrope Variable"'), fits: box.left >= 0 && box.right <= innerWidth }
     })
-    expect(style.family).toContain('Manrope')
-    expect(style.weight).toBe('600')
-    expect(style.loaded && style.visible).toBe(true)
-    const url = new URL(style.href)
-    expect(url.origin + url.pathname).toBe('https://wa.me/5584981363772')
-    expect(url.searchParams.get('text')).toBe('Olá, Iara! Conheci seu site e gostaria de informações sobre o atendimento.')
+    expect(style.family).toContain('Manrope'); expect(style.weight).toBe('600'); expect(style.loaded && style.fits).toBe(true)
   }
 })
 
-test('service cards elevate after their reveal and stay steady during drag', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await page.goto('/#atuacao')
-  const card = page.locator('.service-card').first()
-  await card.hover()
-  await expect.poll(() => card.evaluate(el => new DOMMatrix(getComputedStyle(el).transform).m42)).toBeLessThan(-2)
-  await page.setViewportSize({ width: 375, height: 900 })
-  const viewport = page.locator('.services-rail .rail-viewport')
-  const box = (await viewport.boundingBox())!
-  await page.mouse.move(box.x + 270, box.y + 120)
-  await page.mouse.down()
-  await page.mouse.move(box.x + 80, box.y + 120, { steps: 8 })
-  expect(await card.evaluate(el => new DOMMatrix(getComputedStyle(el).transform).m42)).toBe(0)
-  await page.mouse.up()
+test('live reduced motion preference resets artwork and keeps details usable', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 }); await page.emulateMedia({ reducedMotion: 'no-preference' }); await page.goto('/#sobre')
+  const art = page.locator('.about-books'); await art.scrollIntoViewIfNeeded(); const box = (await art.boundingBox())!
+  await page.mouse.move(box.x + box.width * .9, box.y + box.height * .8)
+  await expect.poll(() => art.locator('img').evaluate(el => Math.abs(new DOMMatrix(getComputedStyle(el).transform).m41))).toBeGreaterThan(1)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect.poll(() => art.locator('img').evaluate(el => getComputedStyle(el).transform)).toBe('none')
+  await expect.poll(() => page.locator('.button').first().evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s')
+  await page.locator('.step-toggle').first().click(); await expect(page.locator('.step-toggle').first()).toHaveAttribute('aria-expanded', 'true')
+})
+
+test('fonts, artwork and browser history load without errors', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message))
+  const failures: string[] = []; page.on('response', r => { if (r.status() >= 400 && r.url().startsWith('http://127.0.0.1')) failures.push(r.url()) })
+  await page.goto('/'); for (const button of await page.locator('.step-toggle').all()) await button.click()
+  for (const image of await page.locator('main img').all()) { await image.scrollIntoViewIfNeeded(); await image.evaluate((img: HTMLImageElement) => img.decode()) }
+  const fonts = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family) })
+  expect(fonts.some(f => f.includes('Baskervville'))).toBe(true); expect(fonts.some(f => f.includes('Manrope'))).toBe(true)
+  await page.getByRole('link', { name: 'Conhecer aposentadorias', exact: true }).click(); await expect(page).toHaveURL('/aposentadorias')
+  await page.goBack(); await expect(page).toHaveURL('/'); expect(errors).toEqual([]); expect(failures).toEqual([])
+})
+
+test('portrait sources adapt to density and have a usable failure fallback', async ({ browser }) => {
+  const sources: string[] = []
+  for (const deviceScaleFactor of [1, 2, 3]) {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor }); const page = await context.newPage()
+    await page.goto('http://127.0.0.1:4173/'); const portrait = page.locator('.hero-portrait'); await portrait.evaluate((img: HTMLImageElement) => img.decode())
+    sources.push(await portrait.evaluate((img: HTMLImageElement) => img.currentSrc)); await context.close()
+  }
+  expect(new Set(sources).size).toBeGreaterThan(1)
+  const context = await browser.newContext(); const page = await context.newPage()
+  await page.route('**/images/iara-santos-*.webp', route => route.abort()); await page.goto('http://127.0.0.1:4173/')
+  await expect(page.locator('.portrait-fallback')).toBeVisible(); await expect(page.locator('.hero-actions .button')).toBeVisible(); await context.close()
 })

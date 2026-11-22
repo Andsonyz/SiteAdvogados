@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { motion } from 'motion/react'
+import { m as motion } from 'motion/react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import type { Service } from '../data/site'
 import { artwork, site } from '../data/site'
@@ -11,7 +11,7 @@ import { Contact } from '../components/Footer'
 export default function ServicePage({ service }: { service: Service }) {
   const other = site.services.find(item => item.slug !== service.slug)!
   const reduced = useReducedMotion()
-  return <motion.div key={service.slug} initial={reduced ? false : { opacity: 0.8, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : 0.35 }}>
+  return <motion.div key={service.slug} initial={false} animate={reduced ? undefined : { y: [6, 0] }} transition={{ duration: reduced ? 0 : 0.3 }}>
     <section className="service-hero section" aria-labelledby="service-title"><div className="shell service-hero-grid"><div>
       <Link className="back-link" to="/"><ArrowLeft size={17} aria-hidden="true" />{site.ui.back}</Link>
       <SectionLabel light>{service.category}</SectionLabel>

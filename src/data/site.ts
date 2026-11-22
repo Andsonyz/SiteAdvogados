@@ -13,18 +13,19 @@ export interface Service {
   note: string
 }
 
-export interface MediaAsset { src: string; alt: string; width: number; height: number }
+export interface MediaAsset { src: string; alt: string; width: number; height: number; srcSet?: string; sizes?: string }
+export interface AttendanceStep { title: string; summary: string; detail: string; illustration: MediaAsset }
 export interface Review { id: string; author: string; text: string; context?: string }
 
 export const artwork = {
-  retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600 },
-  care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600 },
-  conversation: { src: '/images/conversa.webp', alt: 'Balões de conversa que representam o atendimento online', width: 900, height: 600 },
-  books: { src: '/images/livros-caneta.webp', alt: 'Livros jurídicos em couro e caneta-tinteiro', width: 1100, height: 550 },
-  scales: { src: '/images/balanca.webp', alt: 'Balança da Justiça em latão envelhecido', width: 850, height: 777 },
-  gavel: { src: '/images/martelo.webp', alt: 'Martelo de julgamento em madeira de nogueira', width: 1100, height: 550 },
-  justice: { src: '/images/justica.webp', alt: 'Estátua da Justiça em bronze, com balança e espada', width: 800, height: 1200 },
-  collection: { src: '/images/conjunto-juridico.webp', alt: 'Composição de balança jurídica, livros e caneta-tinteiro', width: 1100, height: 563 },
+  retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600, srcSet: '/images/documento-relogio-320.webp 320w, /images/documento-relogio-640.webp 640w, /images/documento-relogio.webp 900w', sizes: '96px' },
+  care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600, srcSet: '/images/acolhimento-320.webp 320w, /images/acolhimento-640.webp 640w, /images/acolhimento.webp 900w', sizes: '96px' },
+  conversation: { src: '/images/conversa.webp', alt: 'Balões de conversa que representam o atendimento online', width: 900, height: 600, srcSet: '/images/conversa-320.webp 320w, /images/conversa-640.webp 640w, /images/conversa.webp 900w', sizes: '(max-width: 1023px) 72px, 104px' },
+  books: { src: '/images/livros-caneta.webp', alt: 'Livros jurídicos em couro e caneta-tinteiro', width: 1100, height: 550, srcSet: '/images/livros-caneta-320.webp 320w, /images/livros-caneta-640.webp 640w, /images/livros-caneta.webp 1100w', sizes: '(max-width: 639px) 88px, (max-width: 1023px) 192px, 272px' },
+  scales: { src: '/images/balanca.webp', alt: 'Balança da Justiça em latão envelhecido', width: 850, height: 777, srcSet: '/images/balanca-320.webp 320w, /images/balanca-640.webp 640w, /images/balanca.webp 850w', sizes: '(max-width: 639px) 112px, 208px' },
+  gavel: { src: '/images/martelo.webp', alt: 'Martelo de julgamento em madeira de nogueira', width: 1100, height: 550, srcSet: '/images/martelo-320.webp 320w, /images/martelo-640.webp 640w, /images/martelo.webp 1100w', sizes: '(max-width: 1023px) 144px, 208px' },
+  justice: { src: '/images/justica.webp', alt: 'Estátua da Justiça em bronze, com balança e espada', width: 800, height: 1200, srcSet: '/images/justica-320.webp 320w, /images/justica-640.webp 640w, /images/justica.webp 800w', sizes: '(max-width: 639px) 112px, 208px' },
+  collection: { src: '/images/conjunto-juridico.webp', alt: 'Composição de balança jurídica, livros e caneta-tinteiro', width: 1100, height: 563, srcSet: '/images/conjunto-juridico-320.webp 320w, /images/conjunto-juridico-640.webp 640w, /images/conjunto-juridico.webp 1100w', sizes: '(max-width: 639px) 224px, 288px' },
 } satisfies Record<string, MediaAsset>
 
 interface SiteContent {
@@ -34,8 +35,8 @@ interface SiteContent {
     oab: string
     experience: string
     location: string
-    logo: { src: string; alt: string; width: number; height: number }
-    portrait: { src: string; alt: string; width: number; height: number }
+    logo: MediaAsset
+    portrait: MediaAsset
   }
   contact: { whatsapp: string; phone: string; message: string; instagram: string; instagramLabel: string; cta: string; region: string; online: string }
   navigation: { label: string; id: string }[]
@@ -43,7 +44,7 @@ interface SiteContent {
   about: { label: string; title: string; paragraphs: string[]; signature: string }
   areas: { label: string; title: string; description: string }
   services: Service[]
-  attendance: { label: string; title: string; description: string; steps: { title: string; description: string }[] }
+  attendance: { label: string; title: string; description: string; expandLabel: string; collapseLabel: string; steps: AttendanceStep[] }
   faq: { label: string; title: string; description: string; items: { question: string; answer: string }[]; disclaimer: string }
   reviews: { label: string; title: string; empty: string; items: Review[] }
   closing: { label: string; title: string; description: string }
@@ -59,9 +60,11 @@ export const site: SiteContent = {
     oab: '', // Preencher somente com o registro correto, incluindo UF. Ex.: valor confirmado pela advogada.
     experience: '10 anos',
     location: 'Mossoró/RN',
-    logo: { src: '/images/iara-santos-logo.webp', alt: 'Iara Santos — Advocacia Especializada', width: 512, height: 433 },
+    logo: { src: '/images/iara-santos-logo-192.webp', srcSet: '/images/iara-santos-logo-192.webp 192w, /images/iara-santos-logo.webp 512w', sizes: '96px', alt: 'Iara Santos — Advocacia Especializada', width: 512, height: 433 },
     portrait: {
-      src: '/images/iara-santos.webp', // Conversão sem perdas do retrato original; PNG preservado ao lado.
+      src: '/images/iara-santos-1050.webp', // Derivados do original preservado, sem alteração da aparência.
+      srcSet: '/images/iara-santos-360.webp 360w, /images/iara-santos-480.webp 480w, /images/iara-santos-640.webp 640w, /images/iara-santos-1050.webp 1050w',
+      sizes: '(max-width: 359px) calc(75vw - 30px), (max-width: 639px) calc(75vw - 36px), (max-width: 1023px) 60vw, 700px',
       alt: 'Iara Santos, advogada com atuação em Direito Previdenciário',
       width: 1050,
       height: 1498,
@@ -141,10 +144,12 @@ export const site: SiteContent = {
     label: 'Como funciona o atendimento',
     title: 'O primeiro passo\né uma conversa.',
     description: 'Um atendimento próximo, com espaço para ouvir sua história e esclarecer suas dúvidas.',
+    expandLabel: 'Ver detalhes',
+    collapseLabel: 'Fechar detalhes',
     steps: [
-      { title: 'Entre em contato', description: 'Inicie uma conversa pelo WhatsApp e conte brevemente o que você precisa.' },
-      { title: 'Compartilhe sua situação', description: 'Apresente sua história e suas dúvidas para que sua necessidade seja compreendida.' },
-      { title: 'Entenda os próximos passos', description: 'Receba orientação sobre os próximos passos e os documentos necessários.' },
+      { title: 'Entre em contato', summary: 'Inicie uma conversa pelo WhatsApp e conte brevemente o que você precisa.', detail: 'O primeiro contato é pelo WhatsApp. Envie uma mensagem contando sua necessidade para receber informações sobre como funciona o atendimento.', illustration: { src: '/images/atendimento-contato.webp', alt: '', width: 480, height: 360 } },
+      { title: 'Compartilhe sua situação', summary: 'Apresente sua história e suas dúvidas para que sua necessidade seja compreendida.', detail: 'No atendimento, você poderá apresentar sua situação e esclarecer dúvidas sobre aposentadorias ou BPC. A orientação considera as particularidades de cada pessoa.', illustration: { src: '/images/atendimento-conversa.webp', alt: '', width: 480, height: 360 } },
+      { title: 'Entenda os próximos passos', summary: 'Receba orientação sobre os próximos passos e os documentos necessários.', detail: 'A partir da análise individual, você receberá orientação sobre os próximos passos e os documentos necessários para a sua situação.', illustration: { src: '/images/atendimento-documentos.webp', alt: '', width: 480, height: 360 } },
     ],
   },
   faq: {
@@ -187,3 +192,6 @@ export const site: SiteContent = {
 }
 
 export const whatsappUrl = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.message)}`
+
+export const hasPublishedReviews = () => site.reviews.items.length > 0
+export const visibleNavigation = () => site.navigation.filter(item => item.id !== 'avaliacoes' || hasPublishedReviews())

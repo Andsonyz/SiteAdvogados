@@ -1,111 +1,85 @@
 # Iara Santos — Advocacia Previdenciária
 
-Site estático de apresentação profissional, implementado no workspace com React, TypeScript e Vite. Página inicial completa, páginas de aposentadorias e BPC e retorno para endereços inexistentes. **Nenhum deploy foi realizado.**
+Site estático em React, TypeScript e Vite. Inclui página inicial, Aposentadorias, BPC e retorno para rotas inexistentes. A revisão de 22/11/2026 prioriza o celular, mantendo a identidade editorial também no desktop. Nenhuma publicação foi realizada nesta etapa.
 
-## Executar localmente
+## Instalação e execução
 
-Requer Node.js 22.12+ (validado com Node 24) e npm.
+Requer Node.js 22.12+ e npm. Validado com Node 24.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abra a URL exibida pelo Vite, normalmente `http://127.0.0.1:5173`.
+Abra a URL exibida pelo Vite. Para conferir o build de produção:
 
 ```sh
-npm run typecheck   # TypeScript
-npm run build       # TypeScript e build em dist/
-npm run preview     # Prévia local do build
+npm run typecheck
+npm run build
+npm run preview -- --port 5183 --strictPort
 ```
 
-As versões exatas estão em `package.json` e `package-lock.json`. A interface usa React Router, Tailwind CSS 4, Motion e Lucide React. **Baskervville e Manrope** são servidas localmente em WOFF2, via Fontsource, com `font-display: swap`; suas licenças OFL estão nos respectivos pacotes. O corpo usa 16 px no celular e 17 px nas telas maiores. O telefone usa Manrope 600, com algarismos alinhados e tabulares. Nenhuma chamada ao Google Fonts é necessária.
+O build gera `dist/`. React Router atende `/`, `/aposentadorias`, `/bpc` e o retorno `*`. `vercel.json` conserva o fallback de SPA necessário para acessar e atualizar URLs internas. Em outro host estático, configure fallback para `index.html`.
 
-## Editar conteúdo
+## Editar conteúdo, fotografia e OAB
 
-**`src/data/site.ts`** centraliza textos, serviços, FAQs, dados profissionais, configurações da foto, links, mensagem do WhatsApp e metadados das páginas. O link de contato é derivado do número e da mensagem usando `encodeURIComponent`.
+**`src/data/site.ts`** centraliza textos, dados profissionais, serviços, dúvidas, etapas do atendimento, imagens, links, mensagem do WhatsApp e metadados. O link WhatsApp é derivado do número e da mensagem usando `encodeURIComponent`.
 
-O plugin local em `vite.config.ts` também preenche os metadados do HTML e o contato sem JavaScript a partir desse mesmo arquivo, tanto no desenvolvimento quanto no build.
+O retrato original fica em `public/images/iara-santos.png`. Os derivados de 360, 480, 640 e 1050 px usam transparência e compressão de alta qualidade; `srcSet` e `sizes` permitem ao navegador selecionar a resolução adequada. A aparência, o rosto e a roupa não foram editados. Para substituir a fotografia:
 
-- `src/components/`: cabeçalho, contato, rodapé, FAQ e elementos compartilhados.
-- `src/pages/`: início, serviços e página de retorno.
-- `src/styles.css` e `src/editorial.css`: paleta, tipografia, composição, máscara do retrato e ajustes responsivos.
-- `src/components/DragRail.tsx`: faixa com scroll snap, toque nativo, arraste de mouse e teclado; reutilizada pelos serviços e por avaliações quando houver várias.
-- `src/components/Wave.tsx`: componente preservado de uma versão anterior; não é usado na composição atual.
-- `src/hooks/useReducedMotion.ts`: acompanha mudanças de preferência durante a sessão, desligando profundidade e transições.
-- `public/favicon.svg`: assinatura tipográfica IS provisória, facilmente substituível.
+1. Preserve o arquivo original, sua transparência e sua proporção.
+2. Ajuste caminhos, dimensões e texto alternativo de `professional.portrait` na configuração central.
+3. Execute `node scripts/prepare-responsive-media.mjs` se estiver usando o mesmo caminho de origem.
+4. Confira o enquadramento da face e do cabelo em 320, 360, 390, 768 e 1440 px, inclusive com densidade 2× e 3×. A máscara atua na base da composição.
 
-Não existem formulários, envio de e-mail, autenticação, banco de dados, analytics ou armazenamento de dados de visitantes. Os links externos abrem outra aba, com `noopener noreferrer`. O contato é exclusivamente pelo WhatsApp; Instagram é apenas um link para o perfil.
+Preencha `professional.oab` somente com o registro correto, incluindo UF. Enquanto estiver vazio, nenhum número ou aviso de pendência será exibido.
 
-## Retrato e logotipo
+## Composição e ilustrações
 
-O retrato é servido em `public/images/iara-santos.webp` (1050 × 1498 px), convertido **sem perdas**, com o PNG original preservado ao lado. A comparação dos pixels decodificados confirmou zero diferenças de alfa e de cor nos pixels visíveis. O logotipo enviado é servido em `public/images/iara-santos-logo.webp`, com o PNG transparente preservado. Ele aparece em Sobre e no rodapé (neste último, com apresentação monocromática por CSS). O cabeçalho conserva a assinatura tipográfica compacta para manter a leitura e os controles confortáveis em telas pequenas.
+- `src/styles.css`: fontes locais, Tailwind e estilos de base.
+- `src/editorial.css`: sistema responsivo único, degradês, tipografia, espaçamento e composições.
+- Serviços aparecem em lista vertical até tablet e em duas colunas no desktop.
+- O atendimento tem três etapas com resumos sempre visíveis e detalhes que abrem de forma independente.
+- As oito artes existentes foram mantidas entre as páginas. Os originais estão em `assets/originals/`.
+- As três novas ilustrações ficam em `assets/generated/`, com derivados em `public/images/atendimento-*.webp`. Os prompts e a origem estão em [docs/ilustracoes-mobile.md](docs/ilustracoes-mobile.md).
+- Avaliações e seu item do menu aparecem somente quando `site.reviews.items` possui relatos reais autorizados. Uma avaliação é estática; várias podem usar o componente de arraste preservado. Não há relatos de teste no conteúdo publicado.
 
-1. Salve o retrato fornecido pela advogada em `public/images/iara-santos.webp` (ou `.png`). Preserve o canal alfa e a proporção original.
-2. Em `src/data/site.ts`, preencha `professional.portrait.src` com `/images/iara-santos.webp` e `width`/`height` com as dimensões reais.
-3. O componente troca automaticamente a composição tipográfica pelo retrato. O CSS usa `object-fit: cover`, alinhamento superior e máscara opaca até 74% da altura, com transição para transparência **somente na base**. No celular, o retrato fica abaixo do contato, em uma composição de altura limitada. O rosto permanece fora da faixa de transição.
-4. Confira rosto, transparência, espaço ao redor e enquadramento em 375, 768 e 1440 px. Ajuste `.portrait-composition` e `.hero-portrait` se necessário, sem alterar rosto, cabelo, expressão ou roupa.
+Baskervville e Manrope são locais, em WOFF2, com `font-display: swap` e licença OFL nos pacotes Fontsource. O telefone usa Manrope 600 e algarismos alinhados/tabulares. Não existem formulários, e-mail, autenticação, banco de dados, analytics ou armazenamento de dados de visitantes. O contato é exclusivamente pelo WhatsApp; Instagram é um link para o perfil.
 
-Para futuras substituições, prefira WebP com alfa, exportado do original com boa qualidade e aproximadamente 1000–1400 px de largura. Se a URL da imagem falhar, a interface retorna à composição tipográfica. Caminhos, dimensões e textos alternativos de retrato e logo ficam em `src/data/site.ts`.
-
-## Artes jurídicas e referências
-
-As oito artes jurídicas voltaram a compor a página inicial e as páginas de serviços, com animações suaves que respeitam a preferência por movimento reduzido. O retrato e o logotipo fornecidos continuam em uso. Os caminhos e textos alternativos estão em `src/data/site.ts`; os originais ficam em `assets/originals/`. Consulte `docs/image-inventory.md` para o inventário.
-
-O comando `node scripts/prepare-assets.mjs` regenera os WebP com Sharp e registra dimensões, alfa, margens e tamanhos em `assets/inventory.json`. O script usa as cópias originais preservadas quando os Downloads não estiverem disponíveis. Oito derivados somam cerca de 0,90 MB, frente a 10,67 MB dos originais.
-
-## Inserir avaliações autorizadas
-
-Edite **`site.reviews.items` em `src/data/site.ts`**. A coleção `Review[]` começa vazia: o site mostra “Ainda não há avaliações publicadas.”, sem estrelas, nomes, contagens, imagens ou setas.
-
-Para cada relato real e autorizado, preencha `id` (identificador único), `author` (nome autorizado) e `text` (relato autorizado). `context` é opcional e só deve trazer informação autorizada. Uma avaliação gera um card estático; várias usam a mesma faixa dos serviços, com controles apenas quando há conteúdo fora da área visível. Não há painel ou coleta de avaliações pelo site.
-
-## Preencher a OAB
-
-Em `src/data/site.ts`, substitua a string vazia de `professional.oab` pelo registro correto, incluindo UF, **apenas após confirmação**. O rodapé acrescenta o prefixo `OAB`. Enquanto o campo estiver vazio, nenhum número ou aviso de pendência é exibido publicamente.
-
-## Rotas e hospedagem futura
-
-Rotas: `/`, `/aposentadorias`, `/bpc` e fallback `*`. O Vite atende rotas diretas durante desenvolvimento e prévia. `vercel.json` já define build, pasta `dist` e rewrite para `index.html`, preservando assets e favicon. Em outra hospedagem estática, configure o mesmo fallback de SPA. Não use um servidor de arquivos sem fallback para testar atualização de rotas internas.
-
-Título e descrição mudam por rota. O HTML inicial também contém metadados, idioma `pt-BR`, favicon e contato alternativo sem JavaScript. Não foi inventado domínio ou URL canônica. Por ser SPA, robôs que não executam JavaScript recebem os metadados iniciais; uma futura necessidade de prévias sociais exclusivas por serviço pode ser atendida com pré-renderização.
-
-## Verificação
+## Verificar a implementação
 
 ```sh
-npx playwright install chromium
+npx playwright install chromium webkit
 npm test
 ```
 
-A suíte inicia um Vite local na porta 4173 e verifica:
+A suíte usa Chromium e WebKit, cobrindo interações, fontes, links, rotas, avaliações condicionais, imagens responsivas, movimento reduzido, texto a 200%, composição da primeira tela e auditorias axe WCAG A/AA. A matriz inclui 320×568, 360×640, 375×812, 390×844, 412×915, 568×320, 768×1024 e 1440×900.
 
-- Número e mensagem de todos os links WhatsApp; ausência de OAB vazia.
-- FAQ pelo teclado (Enter/Espaço).
-- Menu mobile, Escape, retorno de foco e navegação por âncora.
-- Contato flutuante dentro do espaço do cabeçalho mobile, separado da assinatura.
-- Menu rolável em celular na horizontal e botão de contato fora da área de leitura no tablet.
-- Páginas de serviço por acesso direto e atualização, retorno ao início e rota inexistente.
-- Ausência de rolagem horizontal nas páginas em 375, 768 e 1440 px.
-- Auditoria automatizada axe-core WCAG A/AA nessas larguras e com movimento reduzido.
-- Capturas da abertura e da página completa em `test-results/` (pasta ignorada pelo Git).
-- Arraste com mouse e clique após arraste; cancelamento ao soltar fora da faixa; setas, Home/End e controles ocultos no desktop.
-- Toque horizontal com rolagem vertical disponível, por eventos nativos de toque no Chromium.
-- Avaliações vazias, uma estática e várias na faixa, usando fixtures somente no navegador de teste.
-- Troca da preferência de movimento sem recarregar e funcionamento do FAQ com movimento reduzido.
-- Fonte e destino do telefone nas quatro larguras, histórico de navegação e ausência de erros no console.
+Com a prévia de produção na porta 5183:
 
-As verificações automatizadas complementam a inspeção visual, sem substituir uma avaliação humana completa de acessibilidade. Os testes validam os destinos dos links; não enviam mensagens nem abrem conversas reais.
+```sh
+node scripts/mobile-qa.mjs
+node scripts/zoom-qa.mjs
+node scripts/interaction-qa.mjs
+```
 
-Na atualização de 13/11/2026: TypeScript e build aprovados; **18 testes Playwright aprovados**, incluindo as auditorias axe nas larguras configuradas pela suíte (375, 768 e 1440 px). A página inicial e as duas páginas de serviço foram percorridas em Chromium a 360, 390, 768 e 1440 px; não houve rolagem horizontal, imagens quebradas ou erros JavaScript nas combinações examinadas. Não há script de lint configurado.
+`QA_URL` pode apontar para outro endereço local. As capturas e os relatórios ficam em `output/mobile-redesign/`, ignorado pelo Git. O teste de zoom usa um perfil isolado do Chromium e altera o zoom real para 400%, restaurando-o ao terminar. Não modifica o perfil pessoal do usuário.
 
-Com o Vite em execução, `node scripts/visual-qa.mjs` gera capturas, comparações de alfa e relatório em `output/qa/final/`. `QA_URL` permite usar a prévia do build em outro endereço local, junto da opção `--skip-alpha` (os originais de comparação não são publicados). As pastas de saída de QA não são publicadas. A configuração Vercel está preparada, mas não foi validada em um deploy real, pois publicação não fazia parte desta etapa. Toque foi verificado por emulação Chromium; não houve teste em aparelho físico nem auditoria humana completa com leitor de tela.
+As medições Lighthouse usam a versão 13.6.0 em cache npm, sem adicionar dependências de interface. No PowerShell, após iniciar a prévia:
 
-## Referência do conteúdo jurídico
+```powershell
+$env:CHROME_PATH = node --input-type=module -e "import { chromium } from '@playwright/test'; process.stdout.write(chromium.executablePath())"
+1..3 | ForEach-Object {
+  npm exec --yes --package=lighthouse@13.6.0 -- lighthouse http://127.0.0.1:5183/ --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=html --output=json --output-path="output/mobile-redesign/lighthouse/release-$_" --quiet
+}
+```
 
-Os textos fornecidos foram preservados. As informações sobre natureza assistencial, idade de 65 anos, deficiência, ausência de contribuição prévia, décimo terceiro e pensão foram conferidas na [página oficial do BPC do Ministério do Desenvolvimento Social](https://www.gov.br/mds/pt-br/acoes-e-programas/SUAS/beneficios-assistenciais/beneficio-assistencial-ao-idoso-e-a-pessoa-com-deficiencia-bpc). A página não divulga critérios financeiros numéricos, valores, prazos ou promessa de concessão. Confirme novamente em fonte oficial antes de ampliar o conteúdo.
+O relatório de entrega descreve resultados e limites em [docs/validacao-mobile-2026-11-22.md](docs/validacao-mobile-2026-11-22.md). Testes automáticos não substituem revisão com leitor de tela ou aparelho físico. As verificações de links não enviam mensagens.
 
-## Pendências
+A revisão posterior de centralização está em [docs/alinhamento-2026-11-22.md](docs/alinhamento-2026-11-22.md). `tests/alignment.spec.ts` verifica os alinhamentos de botões, contato e rodapé nas três páginas, incluindo os pontos de transição de 639/640 px e a largura de 1024 px. `scripts/alignment-qa.mjs` gera as capturas complementares em `output/alinhamento/` e aceita `QA_URL` (padrão: `http://127.0.0.1:5182`).
 
-- Não foi localizada uma foto identificável do escritório. A captura de referência foi usada apenas como inspiração e a paleta informada foi mantida.
-- Preencher OAB/UF quando o registro correto for informado.
-- Publicação e verificação em hospedagem real ficam para uma etapa posterior, conforme solicitado.
+## Conteúdo profissional e limites
+
+Os textos jurídicos aprovados foram preservados. Antes de ampliar critérios de benefícios, confirme em fonte oficial, como a [página do BPC no MDS](https://www.gov.br/mds/pt-br/acoes-e-programas/SUAS/beneficios-assistenciais/beneficio-assistencial-ao-idoso-e-a-pessoa-com-deficiencia-bpc). Não são exibidos endereço, credenciais, valores, prazos ou resultados não confirmados.
+
+Título, descrição, favicon e idioma pt-BR estão configurados, sem inventar domínio canônico. O HTML inicial traz metadados e contato alternativo sem JavaScript; a interface é uma SPA. Publicação, verificação em hospedagem real e a OAB correta continuam para etapa posterior.

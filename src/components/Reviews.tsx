@@ -1,4 +1,4 @@
-import { site } from '../data/site'
+import { hasPublishedReviews, site } from '../data/site'
 import type { Review } from '../data/site'
 import { Reveal, SectionLabel } from './Shared'
 import DragRail from './DragRail'
@@ -9,6 +9,7 @@ function ReviewCard({ review }: { review: Review }) {
 
 export default function Reviews() {
   const reviews = site.reviews.items
+  if (!hasPublishedReviews()) return null
   return <section id="avaliacoes" className={`section reviews-section ${reviews.length ? 'has-reviews' : ''}`} aria-labelledby="reviews-title">
     <div className="shell">
       <Reveal className="reviews-heading"><div><SectionLabel>{site.reviews.label}</SectionLabel><h2 id="reviews-title">{site.reviews.title}</h2></div>

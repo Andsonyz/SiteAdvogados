@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
-import { site } from '../data/site'
+import { site, visibleNavigation, whatsappUrl } from '../data/site'
+import { WhatsAppIcon } from './SocialIcons'
 import { Brand, WhatsAppLink } from './Shared'
 
 export default function Header() {
@@ -9,6 +10,14 @@ export default function Header() {
   const button = useRef<HTMLButtonElement>(null)
   const header = useRef<HTMLElement>(null)
   const location = useLocation()
+  useEffect(() => {
+    const node = header.current!
+    const update = () => document.documentElement.style.setProperty('--header-height', `${node.getBoundingClientRect().height}px`)
+    const observer = new ResizeObserver(update)
+    observer.observe(node)
+    update()
+    return () => observer.disconnect()
+  }, [])
   useEffect(() => { setOpen(false) }, [location])
   useEffect(() => {
     if (!open) return
@@ -32,12 +41,13 @@ export default function Header() {
   return <header className="site-header" ref={header}>
     <div className="shell header-inner">
       <Brand />
+      <a className="header-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={`${site.contact.cta} — ${site.professional.name}`}><WhatsAppIcon width={24} height={24} /></a>
       <button ref={button} type="button" className="menu-toggle" aria-expanded={open} aria-controls="main-navigation"
         aria-label={open ? site.ui.closeMenu : site.ui.openMenu} onClick={() => setOpen(!open)}>
         {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
       </button>
       <nav id="main-navigation" aria-label="Menu principal" className={`navigation ${open ? 'is-open' : ''}`}>
-        {site.navigation.map(item => <Link key={item.id} to={`/#${item.id}`} onClick={() => setOpen(false)}>{item.label}</Link>)}
+        {visibleNavigation().map(item => <Link key={item.id} to={`/#${item.id}`} onClick={() => setOpen(false)}>{item.label}</Link>)}
         <WhatsAppLink compact className="button-header" />
       </nav>
     </div>

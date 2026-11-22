@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring } from 'motion/react'
+import { m as motion, useMotionValue, useSpring } from 'motion/react'
 import { useEffect } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import type { PointerEvent } from 'react'
@@ -17,7 +17,7 @@ export default function Artwork({ asset, className = '', depth = false }: { asse
     x.set(((event.clientX - box.left) / box.width - 0.5) * 12)
     y.set(((event.clientY - box.top) / box.height - 0.5) * 10)
   }
-  return <motion.div className={`artwork ${className}`} aria-hidden="true" initial={false} whileInView={reduced ? undefined : { opacity: [0.82, 1], scale: [0.97, 1] }} transition={{ duration: reduced ? 0 : 0.65, ease: 'easeOut' }} viewport={{ once: true, amount: 0.15 }} onPointerMove={onPointerMove} onPointerLeave={() => { x.set(0); y.set(0) }}>
-    <motion.img src={asset.src} alt={asset.alt} width={asset.width} height={asset.height} loading="lazy" decoding="async" draggable={false} style={depth ? (reduced ? { x: 0, y: 0 } : { x: smoothX, y: smoothY }) : undefined} />
+  return <motion.div className={`artwork ${className}`} aria-hidden="true" initial={false} whileInView={reduced ? undefined : { scale: [0.985, 1] }} transition={{ duration: reduced ? 0 : 0.35, ease: 'easeOut' }} viewport={{ once: true, amount: 0.15 }} onPointerMove={onPointerMove} onPointerLeave={() => { x.set(0); y.set(0) }}>
+    <motion.img src={asset.src} srcSet={asset.srcSet} sizes={asset.sizes} alt="" width={asset.width} height={asset.height} loading="lazy" decoding="async" draggable={false} style={depth ? (reduced ? { x: 0, y: 0 } : { x: smoothX, y: smoothY }) : undefined} />
   </motion.div>
 }

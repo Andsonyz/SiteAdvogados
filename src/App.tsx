@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { MotionConfig } from 'motion/react'
+import { LazyMotion, MotionConfig } from 'motion/react'
 import { site } from './data/site'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -8,6 +8,8 @@ import Home from './pages/Home'
 import ServicePage from './pages/ServicePage'
 import NotFound from './pages/NotFound'
 import { useReducedMotion } from './hooks/useReducedMotion'
+
+const loadMotionFeatures = () => import('./motion-features').then(module => module.default)
 
 function NavigationEffects() {
   const { pathname, hash, key } = useLocation()
@@ -37,11 +39,11 @@ function NavigationEffects() {
 
 export default function App() {
   const reduced = useReducedMotion()
-  return <MotionConfig reducedMotion={reduced ? 'always' : 'never'}><NavigationEffects /><a className="skip-link" href="#main-content">{site.ui.skip}</a><Header />
+  return <LazyMotion features={loadMotionFeatures} strict><MotionConfig reducedMotion={reduced ? 'always' : 'never'}><NavigationEffects /><a className="skip-link" href="#main-content">{site.ui.skip}</a><Header />
     <main id="main-content" tabIndex={-1}><Routes>
       <Route path="/" element={<Home />} />
       {site.services.map(service => <Route path={`/${service.slug}`} key={service.slug} element={<ServicePage service={service} />} />)}
       <Route path="*" element={<NotFound />} />
     </Routes></main><Footer />
-  </MotionConfig>
+  </MotionConfig></LazyMotion>
 }

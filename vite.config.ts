@@ -5,7 +5,7 @@ import { site, whatsappUrl } from './src/data/site.ts'
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
 
-export default defineConfig({ plugins: [react(), tailwindcss(), {
+export default defineConfig({ server: { watch: { ignored: ['**/output/**', '**/test-results/**', '**/playwright-report/**'] } }, plugins: [react(), tailwindcss(), {
   name: 'site-metadata',
   transformIndexHtml(html) {
     const replacements: Record<string, string> = {
@@ -15,6 +15,8 @@ export default defineConfig({ plugins: [react(), tailwindcss(), {
       PHONE: site.contact.phone,
       NAME: site.professional.name,
     }
-    return html.replace(/__([A-Z_]+)__/g, (match, key: string) => key in replacements ? escapeHtml(replacements[key]) : match)
+    const portrait = site.professional.portrait
+    const preload = `<link rel="preload" as="image" href="${escapeHtml(portrait.src)}" imagesrcset="${escapeHtml(portrait.srcSet ?? '')}" imagesizes="${escapeHtml(portrait.sizes ?? '')}" fetchpriority="high" />`
+    return html.replace('</head>', `${preload}</head>`).replace(/__([A-Z_]+)__/g, (match, key: string) => key in replacements ? escapeHtml(replacements[key]) : match)
   },
 }] })
