@@ -2,10 +2,10 @@ import { chromium } from '@playwright/test'
 import { mkdir, writeFile } from 'node:fs/promises'
 
 const base = process.env.QA_URL || 'http://127.0.0.1:5183'
-const out = 'output/mobile-redesign/zoom'
+const out = process.env.QA_OUTPUT || 'output/mobile-redesign/zoom'
 await mkdir(out, { recursive: true })
 // Isolated QA profile: changes Chrome's real default page zoom, not CSS zoom or text size.
-const context = await chromium.launchPersistentContext('output/mobile-redesign/zoom-profile', {
+const context = await chromium.launchPersistentContext(`${out}-profile`, {
   channel: 'chromium', headless: true, viewport: null, args: ['--window-size=1280,900'],
 })
 const results = []

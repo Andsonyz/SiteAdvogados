@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { site, visibleNavigation, whatsappUrl } from '../data/site'
 import { WhatsAppIcon } from './SocialIcons'
 import { Brand, WhatsAppLink } from './Shared'
+import ScrollProgress from './ScrollProgress'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
@@ -51,5 +52,6 @@ export default function Header() {
         <WhatsAppLink compact className="button-header" />
       </nav>
     </div>
+    <ScrollProgress />
   </header>
 }

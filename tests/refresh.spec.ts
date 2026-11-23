@@ -54,7 +54,7 @@ test('attendance details open independently by keyboard and load three illustrat
     await button.focus(); await page.keyboard.press(i === 1 ? 'Space' : 'Enter')
     await expect(button).toHaveAttribute('aria-expanded', 'true')
     const panel = page.locator(`#step-detail-${i}`); await expect(panel).toBeVisible()
-    await panel.locator('img').evaluate((img: HTMLImageElement) => img.decode())
+    await page.locator('.step-card').nth(i).locator('img').evaluate((img: HTMLImageElement) => img.decode())
     await expect(buttons.first()).toHaveAttribute('aria-expanded', 'true')
   }
   await buttons.nth(1).click(); await expect(page.locator('#step-detail-1')).toBeHidden()

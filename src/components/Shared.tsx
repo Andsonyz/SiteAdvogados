@@ -3,15 +3,13 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { ArrowUpRight, MapPin, Smartphone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { PropsWithChildren } from 'react'
-import { site, whatsappUrl } from '../data/site'
+import { brandAssets, site, whatsappUrl } from '../data/site'
 import { WhatsAppIcon } from './SocialIcons'
 
 export function Brand({ footer = false }: { footer?: boolean }) {
+  const logo = footer ? site.professional.logo : brandAssets.header
   return <Link to="/" className={`brand ${footer ? 'brand-footer' : ''}`} aria-label={`${site.professional.name} — ${site.ui.home}`}>
-    {footer ? <img className="brand-logo" src={site.professional.logo.src} srcSet={site.professional.logo.srcSet} sizes={site.professional.logo.sizes} alt={site.professional.logo.alt} width={site.professional.logo.width} height={site.professional.logo.height} loading="lazy" /> : <>
-    <span className="brand-name">{site.professional.name}</span>
-    <span className="brand-specialty">{site.professional.specialty}</span>
-    </>}
+    <img className="brand-logo" src={logo.src} srcSet={logo.srcSet} sizes={logo.sizes} alt={logo.alt} width={logo.width} height={logo.height} loading={footer ? 'lazy' : 'eager'} decoding="async" />
   </Link>
 }
 
@@ -31,7 +29,7 @@ export function Reveal({ children, className = '', delay = 0 }: PropsWithChildre
   const reduced = useReducedMotion()
   return <motion.div className={className} initial={false}
     animate={reduced ? { y: 0, opacity: 1 } : undefined}
-    whileInView={reduced || delay === 0 ? undefined : { y: [6, 0] }}
+    whileInView={reduced ? undefined : { y: [6, 0], opacity: [0.72, 1] }}
     transition={{ duration: 0.4, delay: reduced ? 0 : delay, ease: 'easeOut' }} viewport={{ once: true, amount: 0.12 }}>
     {children}
   </motion.div>

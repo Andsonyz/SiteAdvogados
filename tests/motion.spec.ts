@@ -1,0 +1,104 @@
+import { test, expect } from '@playwright/test'
+
+test('all three attendance images are visible before expanding details', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/#atendimento')
+  for (let i = 0; i < 3; i++) {
+    const step = page.locator('.step-card').nth(i)
+    await expect(step.locator('.step-toggle')).toHaveAttribute('aria-expanded', 'false')
+    const image = step.locator('.step-illustration img')
+    await expect(image).toBeVisible()
+    await image.scrollIntoViewIfNeeded()
+    await image.evaluate((img: HTMLImageElement) => img.decode())
+    await step.locator('.step-toggle').click()
+    await expect(step.locator('.step-detail')).toBeVisible()
+    await expect(step.locator('img')).toHaveCount(1)
+  }
+})
+
+test('opening animates without blocking first contact and respects live reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 })
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/')
+  const identity = page.locator('.hero-identity')
+  expect(await identity.evaluate(el => el.getAnimations().length)).toBeGreaterThan(0)
+  const cta = page.locator('.hero-actions .button')
+  await expect(cta).toBeInViewport({ ratio: 1 })
+  await expect(cta).toBeEnabled()
+  expect(await cta.evaluate(el => {
+    const b = el.getBoundingClientRect()
+    return el.contains(document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2))
+  })).toBe(true)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect.poll(() => identity.evaluate(el => getComputedStyle(el).transform)).toBe('none')
+  expect(await identity.evaluate(el => el.getAnimations().length)).toBe(0)
+  await expect(page.locator('.hero-portrait')).toBeVisible()
+})
+
+test('scroll progress follows keyboard scrolling, expanding content and route changes', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  const bar = page.locator('.scroll-progress-fill')
+  await expect(bar).toBeAttached()
+  const progress = () => bar.evaluate(el => new DOMMatrix(getComputedStyle(el).transform).m11)
+  await expect.poll(progress).toBeLessThan(.01)
+  await page.locator('#main-content').focus()
+  await page.keyboard.press('End')
+  await expect.poll(progress).toBeGreaterThan(.99)
+  await page.locator('.step-toggle').last().click()
+  await page.keyboard.press('End')
+  await expect.poll(progress).toBeGreaterThan(.99)
+  await page.keyboard.press('Home')
+  await expect.poll(progress).toBeLessThan(.01)
+  await page.getByRole('link', { name: 'Conhecer o BPC', exact: true }).click()
+  await expect(page).toHaveURL('/bpc')
+  await expect.poll(progress).toBeLessThan(.01)
+})
+
+test('section entrances actually run for blocks without delay and settle without moving layout', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/')
+  const block = page.locator('.section-heading').first()
+  await expect(block).toBeAttached()
+  await page.evaluate(() => window.scrollTo({ top: document.querySelector('#atuacao')!.getBoundingClientRect().top + scrollY - 150, behavior: 'instant' }))
+  await expect.poll(() => block.evaluate(el => Math.abs(new DOMMatrix(getComputedStyle(el).transform).m42)), { intervals: [10, 20, 30] }).toBeGreaterThan(.2)
+  await expect.poll(() => block.evaluate(el => Math.abs(new DOMMatrix(getComputedStyle(el).transform).m42))).toBeLessThan(.1)
+  await expect(block).toHaveCSS('opacity', '1')
+})
+
+test('enlarged attendance text keeps whole words when the section has room', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/#atendimento')
+  const title = page.locator('.step-copy h3').nth(1)
+  await expect(title).toBeAttached()
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
+  const lines = await title.evaluate(el => {
+    const range = document.createRange()
+    range.setStart(el.firstChild!, 0)
+    range.setEnd(el.firstChild!, 11) // Compartilhe fits on one line when the illustration yields its space.
+    return range.getClientRects().length
+  })
+  expect(lines).toBe(1)
+})
+
+test('initial hash navigation does not steal focus from the first keyboard interaction', async ({ page }) => {
+  await page.goto('/#duvidas')
+  const question = page.locator('#faq-question-1')
+  await question.focus()
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))
+  await expect(question).toBeFocused()
+  await page.keyboard.press('Enter')
+  await expect(question).toHaveAttribute('aria-expanded', 'true')
+})
+
+test('native section links move keyboard focus even when history keeps its entry key', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  const discover = page.locator('.discover-link')
+  await discover.focus()
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL('/#atuacao')
+  await expect(page.locator('#atuacao')).toBeFocused()
+})

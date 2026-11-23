@@ -17,15 +17,22 @@ export interface MediaAsset { src: string; alt: string; width: number; height: n
 export interface AttendanceStep { title: string; summary: string; detail: string; illustration: MediaAsset }
 export interface Review { id: string; author: string; text: string; context?: string }
 
+const brandSignature = { alt: 'Iara Santos — Advocacia e Assessoria Jurídica', width: 1283, height: 567 }
+export const brandAssets = {
+  light: { ...brandSignature, src: '/images/marca-iara-marfim-384.webp', srcSet: '/images/marca-iara-marfim-192.webp 192w, /images/marca-iara-marfim-384.webp 384w, /images/marca-iara-marfim-768.webp 768w', sizes: '(max-width: 1023px) 192px, 224px' },
+  header: { ...brandSignature, src: '/images/marca-iara-marfim-384.webp', srcSet: '/images/marca-iara-marfim-192.webp 192w, /images/marca-iara-marfim-384.webp 384w, /images/marca-iara-marfim-768.webp 768w', sizes: '(max-width: 639px) 124px, 144px' },
+  ink: { ...brandSignature, src: '/images/marca-iara-vinho-384.webp', srcSet: '/images/marca-iara-vinho-192.webp 192w, /images/marca-iara-vinho-384.webp 384w, /images/marca-iara-vinho-768.webp 768w', sizes: '(max-width: 639px) 96px, 112px' },
+} satisfies Record<string, MediaAsset>
+
 export const artwork = {
-  retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600, srcSet: '/images/documento-relogio-320.webp 320w, /images/documento-relogio-640.webp 640w, /images/documento-relogio.webp 900w', sizes: '96px' },
-  care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600, srcSet: '/images/acolhimento-320.webp 320w, /images/acolhimento-640.webp 640w, /images/acolhimento.webp 900w', sizes: '96px' },
-  conversation: { src: '/images/conversa.webp', alt: 'Balões de conversa que representam o atendimento online', width: 900, height: 600, srcSet: '/images/conversa-320.webp 320w, /images/conversa-640.webp 640w, /images/conversa.webp 900w', sizes: '(max-width: 1023px) 72px, 104px' },
-  books: { src: '/images/livros-caneta.webp', alt: 'Livros jurídicos em couro e caneta-tinteiro', width: 1100, height: 550, srcSet: '/images/livros-caneta-320.webp 320w, /images/livros-caneta-640.webp 640w, /images/livros-caneta.webp 1100w', sizes: '(max-width: 639px) 88px, (max-width: 1023px) 192px, 272px' },
+  retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600, srcSet: '/images/documento-relogio-320.webp 320w, /images/documento-relogio-640.webp 640w, /images/documento-relogio.webp 900w', sizes: '(max-width: 1023px) 144px, 192px' },
+  care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600, srcSet: '/images/acolhimento-320.webp 320w, /images/acolhimento-640.webp 640w, /images/acolhimento.webp 900w', sizes: '(max-width: 1023px) 144px, 192px' },
+  conversation: { src: '/images/conversa.webp', alt: 'Balões de conversa que representam o atendimento online', width: 900, height: 600, srcSet: '/images/conversa-320.webp 320w, /images/conversa-640.webp 640w, /images/conversa.webp 900w', sizes: '(max-width: 1023px) 96px, 104px' },
+  books: { src: '/images/livros-caneta.webp', alt: 'Livros jurídicos em couro e caneta-tinteiro', width: 1100, height: 550, srcSet: '/images/livros-caneta-320.webp 320w, /images/livros-caneta-640.webp 640w, /images/livros-caneta.webp 1100w', sizes: '(max-width: 639px) 120px, (max-width: 1023px) 160px, 224px' },
   scales: { src: '/images/balanca.webp', alt: 'Balança da Justiça em latão envelhecido', width: 850, height: 777, srcSet: '/images/balanca-320.webp 320w, /images/balanca-640.webp 640w, /images/balanca.webp 850w', sizes: '(max-width: 639px) 112px, 208px' },
   gavel: { src: '/images/martelo.webp', alt: 'Martelo de julgamento em madeira de nogueira', width: 1100, height: 550, srcSet: '/images/martelo-320.webp 320w, /images/martelo-640.webp 640w, /images/martelo.webp 1100w', sizes: '(max-width: 1023px) 144px, 208px' },
   justice: { src: '/images/justica.webp', alt: 'Estátua da Justiça em bronze, com balança e espada', width: 800, height: 1200, srcSet: '/images/justica-320.webp 320w, /images/justica-640.webp 640w, /images/justica.webp 800w', sizes: '(max-width: 639px) 112px, 208px' },
-  collection: { src: '/images/conjunto-juridico.webp', alt: 'Composição de balança jurídica, livros e caneta-tinteiro', width: 1100, height: 563, srcSet: '/images/conjunto-juridico-320.webp 320w, /images/conjunto-juridico-640.webp 640w, /images/conjunto-juridico.webp 1100w', sizes: '(max-width: 639px) 224px, 288px' },
+  collection: { src: '/images/conjunto-juridico.webp', alt: 'Composição de balança jurídica, livros e caneta-tinteiro', width: 1100, height: 563, srcSet: '/images/conjunto-juridico-320.webp 320w, /images/conjunto-juridico-640.webp 640w, /images/conjunto-juridico.webp 1100w', sizes: '(max-width: 1023px) 192px, 240px' },
 } satisfies Record<string, MediaAsset>
 
 interface SiteContent {
@@ -60,7 +67,7 @@ export const site: SiteContent = {
     oab: '', // Preencher somente com o registro correto, incluindo UF. Ex.: valor confirmado pela advogada.
     experience: '10 anos',
     location: 'Mossoró/RN',
-    logo: { src: '/images/iara-santos-logo-192.webp', srcSet: '/images/iara-santos-logo-192.webp 192w, /images/iara-santos-logo.webp 512w', sizes: '96px', alt: 'Iara Santos — Advocacia Especializada', width: 512, height: 433 },
+    logo: brandAssets.light,
     portrait: {
       src: '/images/iara-santos-1050.webp', // Derivados do original preservado, sem alteração da aparência.
       srcSet: '/images/iara-santos-360.webp 360w, /images/iara-santos-480.webp 480w, /images/iara-santos-640.webp 640w, /images/iara-santos-1050.webp 1050w',
