@@ -11,8 +11,7 @@ for (const name of ['documento-relogio', 'acolhimento', 'conversa', 'livros-cane
     report.push({ file: output, width, bytes: (await stat(output)).size, hasAlpha: (await sharp(output).metadata()).hasAlpha })
   }
 }
-await sharp('public/images/iara-santos-logo.png').resize({ width: 192 })
-  .webp({ quality: 92, alphaQuality: 100, effort: 5 }).toFile('public/images/iara-santos-logo-192.webp')
+// The current brand has its own faithful preparation pipeline: prepare-brand.mjs.
 for (const width of [360, 480, 640, 1050]) {
   const output = `public/images/iara-santos-${width}.webp`
   await sharp('public/images/iara-santos.png').resize({ width, withoutEnlargement: true })

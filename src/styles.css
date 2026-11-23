@@ -3,18 +3,18 @@
 @font-face { font-family: 'Baskervville'; font-style: normal; font-weight: 400; font-display: swap; src: url('@fontsource/baskervville/files/baskervville-latin-400-normal.woff2') format('woff2'); }
 @font-face { font-family: 'Manrope Variable'; font-style: normal; font-weight: 200 800; font-display: swap; src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2'); }
 @theme {
-  --color-brown: #35251f; --color-ivory: #f4ede3; --color-caramel: #a96c3f; --color-amber: #d9a35f; --color-ink: #191919;
+  --color-wine: #653d3d; --color-ivory: #f3eddf; --color-ink: #43282d;
   --font-sans: 'Manrope Variable', sans-serif; --font-serif: 'Baskervville', Georgia, serif;
 }
 @layer base {
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height, 4.375rem) + 1rem); }
-  body { @apply m-0 font-sans text-brown antialiased; font-size: 1.0625rem; line-height: 1.6; background: #f4ede3; }
-  ::selection { background: #d9a35f; color: #35251f; }
+  body { @apply m-0 font-sans text-ink antialiased; font-size: 1.0625rem; line-height: 1.6; background: #f3eddf; }
+  ::selection { background: #653d3d; color: #f3eddf; }
   a { color: inherit; text-decoration: none; }
   button { cursor: pointer; font: inherit; color: inherit; }
   a,button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-  :focus-visible { outline: 3px solid #8b5332; outline-offset: 4px; }
+  :focus-visible { outline: 3px solid #653d3d; outline-offset: 4px; }
   [hidden] { display: none !important; }
   h1,h2,h3,p,figure,blockquote { margin: 0; }
   h1,h2,h3 { text-wrap: balance; overflow-wrap: break-word; }

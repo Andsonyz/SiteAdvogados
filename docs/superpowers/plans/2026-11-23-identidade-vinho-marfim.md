@@ -51,12 +51,12 @@
 
 **Interfaces:** consumir os mesmos componentes e variantes de marca da Task 1. Tokens `--wine`, `--ivory`, `--ink`, `--muted`, `--rule`, `--gradient-dark`, `--gradient-light` e `--gradient-sand` governam estados e seções.
 
-- [ ] Adicionar teste `wine and ivory identity covers routes and open states`: tema do navegador vinho, CTA marfim/vinho, estados de menu/FAQ/atendimento e quatro rotas sem controles caramelo. Adicionar teste de preservação das oito artes e três ilustrações nas rotas e etapas.
-- [ ] Rodar o teste de paleta e observar falha com as cores antigas.
-- [ ] Consolidar todos os tons antigos em tokens vinho/marfim, incluindo foco, hover, menu, rodapé e 404. Remover o filtro que recriava a marca anterior.
-- [ ] Refinar a composição: cabeçalho com marca real e altura compacta; nome/foto juntos; variação de fundos e respiro; artes menores com cromatismo discreto; rodapé vertical no celular e colunas responsivas. Preservar alinhamentos já corrigidos.
-- [ ] Atualizar tema/favicons e configurações de imagens conforme dimensões reais. Conferir contrastes em extremos dos degradês, CTA, texto secundário e foco.
-- [ ] Executar testes de identidade, primeira tela, alinhamento, texto ampliado e movimento reduzido nos dois motores. Revisar capturas de celular/tablet/desktop e estados abertos; corrigir defeitos encontrados. Commit local da tarefa.
+- [x] Adicionar teste `wine and ivory identity covers routes and open states`: tema do navegador vinho, CTA marfim/vinho, estados de menu/FAQ/atendimento e quatro rotas sem controles caramelo. Adicionar teste de preservação das oito artes e três ilustrações nas rotas e etapas.
+- [x] Rodar o teste de paleta e observar falha com as cores antigas.
+- [x] Consolidar todos os tons antigos em tokens vinho/marfim, incluindo foco, hover, menu, rodapé e 404. Remover o filtro que recriava a marca anterior.
+- [x] Refinar a composição: cabeçalho com marca real e altura compacta; nome/foto juntos; variação de fundos e respiro; artes menores com cromatismo discreto; rodapé vertical no celular e colunas responsivas. Preservar alinhamentos já corrigidos.
+- [x] Atualizar tema/favicons e configurações de imagens conforme dimensões reais. Conferir contrastes em extremos dos degradês, CTA, texto secundário e foco.
+- [x] Executar testes de identidade, primeira tela, alinhamento, texto ampliado e movimento reduzido nos dois motores. Revisar capturas de celular/tablet/desktop e estados abertos; corrigir defeitos encontrados. Commit local da tarefa.
 
 ### Task 3: Auditoria de produção e entrega
 
