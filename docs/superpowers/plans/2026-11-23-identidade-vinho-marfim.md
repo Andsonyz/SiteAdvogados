@@ -62,9 +62,9 @@
 
 **Interfaces:** usar os componentes finais e o build de produção; o script recebe `QA_URL` e grava evidências em `output/identidade-vinho/after/`.
 
-- [ ] Implementar o script de auditoria: quatro rotas × onze larguras × dois motores; verificar overflow, imagens, proporções de marca, erros JavaScript e carregamento de fontes. Capturar páginas completas nas larguras-chave e estados abertos.
-- [ ] Executar `npm run build`, `node --test tests/brand-assets.test.mjs` e a suíte Playwright inteira; resultados esperados: exit 0, nenhuma violação axe ou regressão funcional.
-- [ ] Servir `dist` em porta local própria e rodar a matriz de produção. Conferir 1×/2×/3× para a marca, zoom/texto ampliado e navegação direta; inspecionar as capturas antes/depois.
-- [ ] Atualizar README/inventário e relatório com dados reais, capturas, limites e instruções para substituir a marca. Sem afirmar aparelhos físicos ou desempenho em campo.
+- [x] Implementar o script de auditoria: quatro rotas × onze larguras × dois motores; verificar overflow, imagens, proporções de marca, erros JavaScript e carregamento de fontes. Capturar páginas completas nas larguras-chave e estados abertos.
+- [x] Executar `npm run build`, `node --test tests/brand-assets.test.mjs` e a suíte Playwright inteira; resultados esperados: exit 0, nenhuma violação axe ou regressão funcional.
+- [x] Servir `dist` em porta local própria e rodar a matriz de produção. Conferir 1×/2×/3× para a marca, zoom/texto ampliado e navegação direta; inspecionar as capturas antes/depois.
+- [x] Atualizar README/inventário e relatório com dados reais, capturas, limites e instruções para substituir a marca. Sem afirmar aparelhos físicos ou desempenho em campo.
 - [ ] Solicitar uma revisão final independente da branch; tratar falhas importantes, repetir apenas verificações afetadas e registrar decisões.
 - [ ] Confirmar `git diff --check`, registrar commits locais, encerrar somente processos próprios e entregar o resultado no checkout solicitado, sem publicação.

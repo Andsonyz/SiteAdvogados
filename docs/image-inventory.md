@@ -1,5 +1,7 @@
 # Inventário e escolha das imagens — 06/11/2026
 
+> **Atualização de identidade — 23/11/2026:** a marca azul/dourada abaixo é histórica e não aparece mais na interface. A nova referência está em `assets/brand/referencia-original.png`; os mestres transparentes vinho/marfim, o monograma e o manifesto de recorte ficam em `assets/brand/`. Os derivados de 192/384/768 px são `public/images/marca-iara-*`. Cabeçalho, assinatura do Sobre, rodapé e favicon usam a nova marca. Extração determinística das duas cores, sem regenerar letras; fidelidade de recomposição e transparência cobertas por `tests/brand-assets.test.mjs`. As oito artes e o retrato original foram preservados; o tratamento cromático das artes é somente CSS. Ver `identidade-vinho-2026-11-23.md`.
+
 > O inventário registra a seleção original. Em 22/11/2026 foram preparados derivados responsivos de 320 e 640 px das oito artes, novas ilustrações editoriais e quatro tamanhos do retrato; ver `ilustracoes-mobile.md` e `validacao-mobile-2026-11-22.md`. As oito artes foram reintegradas ao site com animações suaves; o retrato e o logotipo permanecem visíveis.
 
 Todos os arquivos de produção abaixo foram abertos individualmente e examinados. Os oito novos originais estão preservados em `assets/originals/`; o retrato e o logo originais continuam em `public/images/*.png`. A captura de inspiração está em `assets/references/`, fora da pasta publicada.
