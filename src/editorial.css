@@ -11,6 +11,8 @@ body { background: var(--gradient-light); }
 .shell { width: min(75rem, calc(100% - 2.5rem)); margin-inline: auto; }
 .section { padding-block: 3.25rem; }
 .site-header { position: sticky; top: 0; z-index: 30; color: var(--ivory); background: var(--wine); border-bottom: 1px solid var(--rule-light); }
+.scroll-progress { position: absolute; inset: auto 0 -1px; height: 3px; background: #f3eddf24; pointer-events: none; overflow: hidden; }
+.scroll-progress-fill { display: block; height: 100%; background: #e6c4b2; transform: scaleX(0); transform-origin: left; }
 .header-inner { display: flex; flex-wrap: wrap; align-items: center; gap: .625rem; min-height: 4.75rem; }
 .brand { flex: 1 1 8rem; display: inline-flex; flex-direction: column; line-height: 1.15; min-height: 2.75rem; justify-content: center; min-width: 0; margin-right: auto; }
 .header-whatsapp,.menu-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 2.75rem; width: 2.75rem; height: 2.75rem; border: 1px solid var(--line-on-wine); background: transparent; }
@@ -45,7 +47,18 @@ body { background: var(--gradient-light); }
 .locations p { display: flex; align-items: flex-start; gap: .5rem; }
 .locations svg { margin-top: .1875rem; color: var(--wine); }
 .artwork { min-width: 0; max-width: 100%; }
-.artwork img { width: 100%; height: auto; object-fit: contain; user-select: none; filter: grayscale(.42) sepia(.12) saturate(.6); }
+.artwork img { width: 100%; height: auto; object-fit: contain; user-select: none; filter: sepia(.08) saturate(.82); }
+
+/* The opening is content, never a loading gate. Links are usable throughout. */
+@keyframes opening-type { from { opacity: .6; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes opening-portrait { from { opacity: .65; transform: translateX(6px); } to { opacity: 1; transform: none; } }
+@keyframes opening-rule { from { transform: scaleX(.15); } to { transform: scaleX(1); } }
+.hero-identity { animation: opening-type 600ms cubic-bezier(.2,.7,.2,1) both; }
+.portrait-composition { animation: opening-portrait 650ms cubic-bezier(.2,.7,.2,1) both; }
+.hero-copy { animation: opening-type 400ms ease-out both; }
+.hero-bottom { animation: opening-type 400ms ease-out both; }
+.hero .eyebrow::before { content: ''; position: absolute; top: -.5rem; left: 0; width: 2rem; height: 1px; background: #e6c4b2; transform-origin: left; animation: opening-rule 600ms ease-out both; }
+.hero .eyebrow { position: relative; }
 
 /* The name and portrait share the first row. No fixed hero height or text overlays. */
 .hero { color: var(--ivory); background: var(--gradient-dark); overflow: clip; }
@@ -80,7 +93,7 @@ body { background: var(--gradient-light); }
 .about-section,.attendance-section,.service-body,.not-found,.reviews-section { background: var(--gradient-light); }
 .areas-section,.faq-section { background: var(--gradient-sand); }
 .about-grid { display: grid; gap: 1.5rem; }
-.about-heading { display: grid; grid-template-columns: minmax(0,1fr) min(22%,5.5rem); column-gap: .75rem; align-items: center; }
+.about-heading { display: grid; grid-template-columns: minmax(0,1fr) clamp(5.5rem,28vw,7.5rem); column-gap: .75rem; align-items: center; }
 .about-heading > :not(.about-books) { grid-column: 1; }
 .about-heading h2 { font-size: clamp(1.875rem, 1.6rem + 1.5vw, 3.5rem); }
 .about-side-note { font-size: .875rem; color: var(--muted); margin-top: 1rem; }
@@ -93,10 +106,10 @@ body { background: var(--gradient-light); }
 .services-list { display: grid; grid-template-columns: 1fr; list-style: none; padding: 0; margin: 0; gap: 1.5rem; }
 .services-list > li { min-width: 0; }
 .service-card { border-top: 1px solid var(--rule); padding-top: 1rem; height: 100%; }
-.service-card-visual { display: flex; align-items: center; justify-content: space-between; height: 4.25rem; }
+.service-card-visual { display: flex; align-items: center; justify-content: space-between; height: 6rem; }
 .service-number { color: var(--wine); font: 1.5rem var(--font-serif); }
-.service-illustration { width: 5.5rem; }
-.service-illustration img { max-height: 4.25rem; }
+.service-illustration { width: 9rem; }
+.service-illustration img { max-height: 6rem; }
 .service-card-copy { margin-top: .5rem; }
 .service-category { font-size: .75rem; letter-spacing: .04em; color: var(--wine); }
 .service-card h3 { font: 400 1.875rem/1.15 var(--font-serif); margin-block: .625rem .875rem; }
@@ -104,23 +117,31 @@ body { background: var(--gradient-light); }
 .attendance-heading { display: grid; gap: 1rem; margin-bottom: 1.75rem; }
 .attendance-illustrated { display: flex; align-items: center; gap: 1rem; }
 .attendance-illustrated .section-intro { margin: 0; min-width: 0; }
-.conversation-art { width: min(22%,4.5rem); flex-shrink: 0; }
+.conversation-art { width: min(28%,6rem); flex-shrink: 0; }
 .steps-grid { display: grid; list-style: none; padding: 0; margin: 0; gap: 1rem; }
-.step-card { display: grid; grid-template-columns: 1.75rem minmax(0,1fr); gap: .75rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+.step-card { container: attendance-step / inline-size; display: grid; grid-template-columns: 1.75rem minmax(0,1fr) min(24vw,5.5rem); gap: .75rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+.step-copy { grid-column: 2 / -1; grid-row: 1; }
+.step-copy h3 { padding-right: calc(min(24vw,5.5rem) + .5rem); min-height: 4.125rem; }
 .step-number { font: 1.375rem var(--font-serif); color: var(--wine); }
 .step-copy h3 { font-size: 1.0625rem; font-weight: 700; line-height: 1.5; }
 .step-copy > p { color: var(--muted); margin-top: .5rem; }
 .step-toggle { display: flex; align-items: center; gap: .625rem; min-height: 2.75rem; padding: .5rem 0; border: 0; background: transparent; color: var(--wine); font-size: .875rem; font-weight: 700; margin-top: .25rem; }
 .step-toggle svg { transition: transform 200ms; }
 .is-open > .step-copy .step-toggle svg { transform: rotate(45deg); }
-.step-detail { padding-block: .5rem .75rem; }
+.step-detail { padding-block: .5rem .75rem; animation: opening-type 250ms ease-out; }
 .step-detail p { color: var(--ink); }
-.step-illustration { width: 9rem; margin: 0 auto .75rem; }
-.step-illustration img { max-height: 7.5rem; }
+.step-illustration { grid-column: 3; grid-row: 1; width: 100%; margin: -.125rem 0 0; align-self: start; pointer-events: none; }
+.step-illustration img { max-height: 4.125rem; }
+/* The threshold grows with enlarged text, giving words the full row before they fragment. */
+@container attendance-step (max-width: 18rem) {
+  .step-copy { grid-column: 1 / -1; grid-row: 2; }
+  .step-copy h3 { padding-right: 0; min-height: 0; }
+  .step-illustration { grid-column: 2 / -1; grid-row: 1; width: min(24vw,5.5rem); justify-self: end; }
+}
 .attendance-bottom { border-top: 1px solid var(--rule); padding-top: 1.25rem; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
 .attendance-bottom .button { width: 100%; }
 .faq-grid { display: grid; gap: 1.5rem; }
-.faq-heading { display: grid; grid-template-columns: minmax(0,1fr) min(18%,3.5rem); column-gap: .75rem; align-items: center; }
+.faq-heading { display: grid; grid-template-columns: minmax(0,1fr) min(25%,5rem); column-gap: .75rem; align-items: center; }
 .faq-heading > :not(.faq-art) { grid-column: 1; }
 .faq-heading .section-intro { max-width: 24ch; }
 .faq-art { grid-column: 2; grid-row: 1 / 4; width: 100%; }
@@ -283,11 +304,16 @@ body { background: var(--gradient-light); }
   .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 3rem; margin-bottom: 2.5rem; }
   .section-heading .section-intro { margin: 0; }
   .services-list { grid-template-columns: 1fr 1fr; gap: 3rem; }
-  .service-card-visual { height: 5.5rem; }
-  .service-illustration { width: 7rem; }
-  .service-illustration img { max-height: 5.5rem; }
+  .service-card-visual { height: 8rem; }
+  .service-illustration { width: 12rem; }
+  .service-illustration img { max-height: 8rem; }
   .service-card-copy { max-width: 47ch; }
   .steps-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 2rem; align-items: start; }
+  .step-card { grid-template-columns: 1.75rem minmax(0,1fr); }
+  .step-illustration { grid-column: 2; grid-row: 1; width: 9rem; margin: 0 auto .5rem; justify-self: center; }
+  .step-illustration img { max-height: 6.75rem; }
+  .step-copy { grid-column: 2; grid-row: 2; }
+  .step-copy h3 { padding-right: 0; min-height: 0; }
   .attendance-heading { margin-bottom: 2.5rem; }
   .attendance-bottom { flex-direction: row; justify-content: space-between; align-items: center; margin-top: 2.5rem; }
   .attendance-bottom .button { width: auto; }

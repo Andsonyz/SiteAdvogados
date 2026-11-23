@@ -54,9 +54,11 @@ Os tokens de cor e degradê estão no início de `src/editorial.css`; as cores b
 - `src/styles.css`: fontes locais, Tailwind e estilos de base.
 - `src/editorial.css`: sistema responsivo único, degradês, tipografia, espaçamento e composições.
 - Serviços aparecem em lista vertical até tablet e em duas colunas no desktop.
-- O atendimento tem três etapas com resumos sempre visíveis e detalhes que abrem de forma independente.
+- O atendimento tem três etapas com resumos e ilustrações sempre visíveis; os detalhes abrem de forma independente.
 - As oito artes existentes foram mantidas entre as páginas. Os originais estão em `assets/originals/`.
 - As três novas ilustrações ficam em `assets/generated/`, com derivados em `public/images/atendimento-*.webp`. Os prompts e a origem estão em [docs/ilustracoes-mobile.md](docs/ilustracoes-mobile.md).
+- A abertura tem entrada breve sem tela de espera. As seções e artes entram uma vez ao rolar. `prefers-reduced-motion` cancela os movimentos, inclusive quando alterado durante a sessão.
+- A barra de rolagem usa a paleta da marca e as dimensões nativas do navegador. `src/components/ScrollProgress.tsx` mostra o progresso sob o cabeçalho, sem interferir em toque, roda ou teclado. A aparência da barra nativa também depende do sistema operacional.
 - Avaliações e seu item do menu aparecem somente quando `site.reviews.items` possui relatos reais autorizados. Uma avaliação é estática; várias podem usar o componente de arraste preservado. Não há relatos de teste no conteúdo publicado.
 
 Baskervville e Manrope são locais, em WOFF2, com `font-display: swap` e licença OFL nos pacotes Fontsource. O telefone usa Manrope 600 e algarismos alinhados/tabulares. Não existem formulários, e-mail, autenticação, banco de dados, analytics ou armazenamento de dados de visitantes. O contato é exclusivamente pelo WhatsApp; Instagram é um link para o perfil.
@@ -96,6 +98,8 @@ O relatório do redesign mobile anterior está em [docs/validacao-mobile-2026-11
 A revisão posterior de centralização está em [docs/alinhamento-2026-11-22.md](docs/alinhamento-2026-11-22.md). `tests/alignment.spec.ts` verifica os alinhamentos de botões, contato e rodapé nas três páginas, incluindo os pontos de transição de 639/640 px e a largura de 1024 px. `scripts/alignment-qa.mjs` gera as capturas complementares em `output/alinhamento/` e aceita `QA_URL` (padrão: `http://127.0.0.1:5182`).
 
 A auditoria da identidade atual está em [docs/identidade-vinho-2026-11-23.md](docs/identidade-vinho-2026-11-23.md). Com o build servido na porta 5184, `node scripts/identity-qa.mjs` confere as quatro rotas em onze larguras e dois motores, salva capturas e registra contraste, fontes, imagens e destinos do WhatsApp em `output/identidade-vinho/after/report.json`. Também aceita `QA_URL`.
+
+A revisão posterior de imagens, entrada e rolagem está em [docs/imagens-movimento-scroll-2026-11-23.md](docs/imagens-movimento-scroll-2026-11-23.md). Em máquinas com pouca memória, execute `npx playwright test --workers=1` e as auditorias em sequência. `scripts/identity-qa.mjs` aceita `QA_OUTPUT` para manter relatórios de revisões diferentes. Com a prévia na porta 5187, `node scripts/motion-qa.mjs` gera capturas e uma gravação em `output/motion-refresh/motion/`; também aceita `QA_URL`.
 
 ## Conteúdo profissional e limites
 

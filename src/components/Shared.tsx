@@ -29,7 +29,7 @@ export function Reveal({ children, className = '', delay = 0 }: PropsWithChildre
   const reduced = useReducedMotion()
   return <motion.div className={className} initial={false}
     animate={reduced ? { y: 0, opacity: 1 } : undefined}
-    whileInView={reduced || delay === 0 ? undefined : { y: [6, 0] }}
+    whileInView={reduced ? undefined : { y: [6, 0], opacity: [0.72, 1] }}
     transition={{ duration: 0.4, delay: reduced ? 0 : delay, ease: 'easeOut' }} viewport={{ once: true, amount: 0.12 }}>
     {children}
   </motion.div>

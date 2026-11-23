@@ -2,7 +2,7 @@ import { chromium, webkit } from 'playwright'
 import { mkdir, writeFile } from 'node:fs/promises'
 
 const base = process.env.QA_URL || 'http://127.0.0.1:5184'
-const output = 'output/identidade-vinho/after'
+const output = process.env.QA_OUTPUT || 'output/identidade-vinho/after'
 await mkdir(output, { recursive: true })
 const matrix = [[320, 568], [360, 640], [375, 812], [390, 844], [412, 915], [568, 320], [639, 900], [640, 900], [768, 1024], [1024, 900], [1440, 900]]
 const routes = [['home', '/'], ['aposentadorias', '/aposentadorias'], ['bpc', '/bpc'], ['404', '/nao-existe']]

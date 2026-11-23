@@ -9,6 +9,11 @@
 @layer base {
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-height, 4.375rem) + 1rem); }
+  html { scrollbar-color: #653d3d #f3eddf; scrollbar-width: auto; }
+  ::-webkit-scrollbar { width: auto; height: auto; }
+  ::-webkit-scrollbar-track { background: #f3eddf; }
+  ::-webkit-scrollbar-thumb { background: #653d3d; border: 3px solid #f3eddf; border-radius: 12px; }
+  ::-webkit-scrollbar-thumb:hover { background: #43282d; }
   body { @apply m-0 font-sans text-ink antialiased; font-size: 1.0625rem; line-height: 1.6; background: #f3eddf; }
   ::selection { background: #653d3d; color: #f3eddf; }
   a { color: inherit; text-decoration: none; }
@@ -26,6 +31,9 @@
   svg { flex-shrink: 0; }
   section { position: relative; }
   #main-content:focus,section[tabindex="-1"]:focus { outline: none; }
+}
+@media (forced-colors: active) {
+  html { scrollbar-color: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 
 test('WhatsApp preserves number and message on every page without unconfirmed OAB', async ({ page }) => {
   for (const path of ['/', '/aposentadorias', '/bpc']) {
-    await page.goto(path); const links = page.locator('a[href*="wa.me"]'); expect(await links.count()).toBeGreaterThan(2)
+    await page.goto(path); const links = page.locator('a[href*="wa.me"]'); await expect(links.first()).toBeAttached(); expect(await links.count()).toBeGreaterThan(2)
     for (const link of await links.all()) {
       const url = new URL((await link.getAttribute('href'))!)
       expect(url.origin + url.pathname).toBe('https://wa.me/5584981363772')
@@ -108,6 +108,13 @@ test('keyboard focus remains visible through the entire page', async ({ page }) 
   await page.locator('.skip-link').focus()
   for (let index = 0; index < 22; index++) {
     await page.keyboard.press('Tab')
+    // WebKit scrolls the newly focused control on the next rendering frame.
+    await expect.poll(() => page.evaluate(() => {
+      const el = document.activeElement as HTMLElement
+      if (el === document.body || el.closest('.site-header') || el.classList.contains('skip-link')) return true
+      const r = el.getBoundingClientRect()
+      return r.bottom > document.querySelector('.site-header')!.getBoundingClientRect().bottom && r.top < innerHeight
+    })).toBe(true)
     const focus = await page.evaluate(() => {
       const el = document.activeElement as HTMLElement; const r = el.getBoundingClientRect(); const css = getComputedStyle(el)
       return { name: el.textContent?.trim(), body: el === document.body, header: !!el.closest('.site-header'), skip: el.classList.contains('skip-link'), top: r.top, bottom: r.bottom, outline: css.outlineStyle, headerBottom: document.querySelector('.site-header')!.getBoundingClientRect().bottom }
