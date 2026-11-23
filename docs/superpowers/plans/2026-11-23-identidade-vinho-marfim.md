@@ -1,6 +1,6 @@
 # Identidade vinho e marfim — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Aplicar a identidade aprovada vinho/marfim e a nova marca a todo o site, preservando conteúdo, retrato, artes, acessibilidade e funcionalidades.
 
@@ -66,5 +66,5 @@
 - [x] Executar `npm run build`, `node --test tests/brand-assets.test.mjs` e a suíte Playwright inteira; resultados esperados: exit 0, nenhuma violação axe ou regressão funcional.
 - [x] Servir `dist` em porta local própria e rodar a matriz de produção. Conferir 1×/2×/3× para a marca, zoom/texto ampliado e navegação direta; inspecionar as capturas antes/depois.
 - [x] Atualizar README/inventário e relatório com dados reais, capturas, limites e instruções para substituir a marca. Sem afirmar aparelhos físicos ou desempenho em campo.
-- [ ] Solicitar uma revisão final independente da branch; tratar falhas importantes, repetir apenas verificações afetadas e registrar decisões.
-- [ ] Confirmar `git diff --check`, registrar commits locais, encerrar somente processos próprios e entregar o resultado no checkout solicitado, sem publicação.
+- [x] Solicitar uma revisão final independente da branch; tratar falhas importantes, repetir apenas verificações afetadas e registrar decisões.
+- [x] Confirmar `git diff --check`, registrar commits locais, encerrar somente processos próprios e entregar o resultado no checkout solicitado, sem publicação.

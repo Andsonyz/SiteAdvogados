@@ -81,16 +81,17 @@ node scripts/interaction-qa.mjs
 
 `QA_URL` pode apontar para outro endereço local. As capturas e os relatórios ficam em `output/mobile-redesign/`, ignorado pelo Git. O teste de zoom usa um perfil isolado do Chromium e altera o zoom real para 400%, restaurando-o ao terminar. Não modifica o perfil pessoal do usuário.
 
-As medições Lighthouse usam a versão 13.6.0 em cache npm, sem adicionar dependências de interface. No PowerShell, após iniciar a prévia:
+As medições Lighthouse usam a versão 13.6.0 em cache npm, sem adicionar dependências de interface. No PowerShell, após iniciar `npm run preview -- --port 5184 --strictPort`:
 
 ```powershell
 $env:CHROME_PATH = node --input-type=module -e "import { chromium } from '@playwright/test'; process.stdout.write(chromium.executablePath())"
+New-Item -ItemType Directory -Force -Path output/identidade-vinho/lighthouse | Out-Null
 1..3 | ForEach-Object {
   npm exec --yes --package=lighthouse@13.6.0 -- lighthouse http://127.0.0.1:5184/ --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=html --output=json --output-path="output/identidade-vinho/lighthouse/run-$_" --quiet
 }
 ```
 
-O relatório de entrega descreve resultados e limites em [docs/validacao-mobile-2026-11-22.md](docs/validacao-mobile-2026-11-22.md). Testes automáticos não substituem revisão com leitor de tela ou aparelho físico. As verificações de links não enviam mensagens.
+O relatório do redesign mobile anterior está em [docs/validacao-mobile-2026-11-22.md](docs/validacao-mobile-2026-11-22.md). Os resultados da identidade atual estão no relatório de 23/11 abaixo. Testes automáticos não substituem revisão com leitor de tela ou aparelho físico. As verificações de links não enviam mensagens.
 
 A revisão posterior de centralização está em [docs/alinhamento-2026-11-22.md](docs/alinhamento-2026-11-22.md). `tests/alignment.spec.ts` verifica os alinhamentos de botões, contato e rodapé nas três páginas, incluindo os pontos de transição de 639/640 px e a largura de 1024 px. `scripts/alignment-qa.mjs` gera as capturas complementares em `output/alinhamento/` e aceita `QA_URL` (padrão: `http://127.0.0.1:5182`).
 

@@ -27,6 +27,7 @@ Os três testes Node verificam presença de letras opacas e fundo transparente, 
 | Axe | Nenhuma violação detectada na matriz automatizada das quatro rotas e oito tamanhos da suíte |
 | Produção | 88 combinações: quatro rotas × onze tamanhos × dois motores; sem overflow, imagens quebradas, fontes ausentes, deformação de marca, erro de destino de contato ou erro JavaScript |
 | Identidade e preservação | Testes novos cobrem marca, estados vinho/marfim e presença das oito artes/três ilustrações |
+| Hover e foco em produção | Dez verificações diretas de cores dos botões e foco por teclado em Chromium/WebKit, aprovadas |
 
 Tamanhos da auditoria de produção: 320 × 568, 360 × 640, 375 × 812, 390 × 844, 412 × 915, 568 × 320, 639 × 900, 640 × 900, 768 × 1024, 1024 × 900 e 1440 × 900. Rotas `/`, `/aposentadorias`, `/bpc`, `/nao-existe`. Build servido localmente em `http://127.0.0.1:5184/`.
 
@@ -66,11 +67,18 @@ A referência anterior de LCP ≤ 2,5 s continua não atingida neste laboratóri
 - Comparativo mobile: `output/identidade-vinho/after/comparison-mobile.png` (antes à esquerda, depois à direita).
 - Estados abertos, recortes de abertura/contato/rodapé e marca em três densidades estão na mesma pasta.
 - Matriz, fontes, destinos, erros e contraste: `output/identidade-vinho/after/report.json`.
+- Estados hover/foco: `output/identidade-vinho/after/states.json`.
 - Suíte: `output/identidade-vinho/playwright-final.log`.
 - Zoom real: `output/identidade-vinho/zoom/report.json`, capturas e perfil isolado de auditoria; não foi alterado o perfil pessoal do usuário.
 - Especificação e plano: `docs/superpowers/specs/2026-11-23-identidade-vinho-marfim-design.md` e `docs/superpowers/plans/2026-11-23-identidade-vinho-marfim.md`.
 
 O README descreve instalação, substituição da fotografia, OAB e preparação da marca. `npm test` executa Playwright; `npm run test:assets` executa o runner Node. A pasta `output/` é local e ignorada pelo Git.
+
+## Revisão independente e estado da entrega
+
+Uma revisão independente, somente leitura, examinou o intervalo `53d287f..04d2703`, a especificação, os testes e as capturas. Não confirmou achados críticos, importantes ou menores. Conferiu também a marca em 3×, a referência, a abertura, o rodapé, o tablet e o menu aberto. O revisor não repetiu a suíte nem atestou dispositivos físicos, leitor de tela ou desempenho de campo.
+
+A entrega permanece no checkout solicitado, branch local `feat/identidade-vinho-marfim`, sem push, merge ou publicação. Os bundles JS/CSS do último build mantiveram os mesmos hashes do build auditado. As limitações abaixo permanecem explícitas, sem pressupor equivalência entre emulação e uso real.
 
 ## Limitações
 
