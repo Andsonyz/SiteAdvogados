@@ -17,6 +17,13 @@ export interface MediaAsset { src: string; alt: string; width: number; height: n
 export interface AttendanceStep { title: string; summary: string; detail: string; illustration: MediaAsset }
 export interface Review { id: string; author: string; text: string; context?: string }
 
+const brandSignature = { alt: 'Iara Santos — Advocacia e Assessoria Jurídica', width: 1283, height: 567 }
+export const brandAssets = {
+  light: { ...brandSignature, src: '/images/marca-iara-marfim-384.webp', srcSet: '/images/marca-iara-marfim-192.webp 192w, /images/marca-iara-marfim-384.webp 384w, /images/marca-iara-marfim-768.webp 768w', sizes: '(max-width: 639px) 168px, 176px' },
+  header: { ...brandSignature, src: '/images/marca-iara-marfim-384.webp', srcSet: '/images/marca-iara-marfim-192.webp 192w, /images/marca-iara-marfim-384.webp 384w, /images/marca-iara-marfim-768.webp 768w', sizes: '(max-width: 639px) 124px, 144px' },
+  ink: { ...brandSignature, src: '/images/marca-iara-vinho-384.webp', srcSet: '/images/marca-iara-vinho-192.webp 192w, /images/marca-iara-vinho-384.webp 384w, /images/marca-iara-vinho-768.webp 768w', sizes: '(max-width: 639px) 96px, 112px' },
+} satisfies Record<string, MediaAsset>
+
 export const artwork = {
   retirement: { src: '/images/documento-relogio.webp', alt: 'Documento e relógio em uma composição âmbar', width: 900, height: 600, srcSet: '/images/documento-relogio-320.webp 320w, /images/documento-relogio-640.webp 640w, /images/documento-relogio.webp 900w', sizes: '96px' },
   care: { src: '/images/acolhimento.webp', alt: 'Mãos acolhendo figuras humanas', width: 900, height: 600, srcSet: '/images/acolhimento-320.webp 320w, /images/acolhimento-640.webp 640w, /images/acolhimento.webp 900w', sizes: '96px' },
@@ -60,7 +67,7 @@ export const site: SiteContent = {
     oab: '', // Preencher somente com o registro correto, incluindo UF. Ex.: valor confirmado pela advogada.
     experience: '10 anos',
     location: 'Mossoró/RN',
-    logo: { src: '/images/iara-santos-logo-192.webp', srcSet: '/images/iara-santos-logo-192.webp 192w, /images/iara-santos-logo.webp 512w', sizes: '96px', alt: 'Iara Santos — Advocacia Especializada', width: 512, height: 433 },
+    logo: brandAssets.light,
     portrait: {
       src: '/images/iara-santos-1050.webp', // Derivados do original preservado, sem alteração da aparência.
       srcSet: '/images/iara-santos-360.webp 360w, /images/iara-santos-480.webp 480w, /images/iara-santos-640.webp 640w, /images/iara-santos-1050.webp 1050w',

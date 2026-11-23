@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { artwork, site } from '../data/site'
+import { artwork, brandAssets, site } from '../data/site'
 import Artwork from '../components/Artwork'
 import { AttendanceLocations, Reveal, SectionLabel, WhatsAppLink } from '../components/Shared'
 import Attendance from '../components/Attendance'
@@ -33,10 +33,11 @@ function Hero() {
 }
 
 function About() {
+  const logo = brandAssets.ink
   return <section id="sobre" className="section about-section" aria-labelledby="about-title">
     <div className="shell about-grid">
       <Reveal className="about-heading"><SectionLabel>{site.about.label}</SectionLabel><h2 id="about-title">{site.about.title}</h2><p className="about-side-note">{site.professional.specialty}<br />{site.professional.location} e região</p><Artwork asset={artwork.books} className="about-books" depth /></Reveal>
-      <Reveal className="about-copy" delay={0.1}>{site.about.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<div className="about-signoff"><img className="about-logo" src={site.professional.logo.src} srcSet={site.professional.logo.srcSet} sizes={site.professional.logo.sizes} alt={site.professional.logo.alt} width={site.professional.logo.width} height={site.professional.logo.height} loading="lazy" /><p>{site.about.signature}</p></div></Reveal>
+      <Reveal className="about-copy" delay={0.1}>{site.about.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<div className="about-signoff"><img className="about-logo" src={logo.src} srcSet={logo.srcSet} sizes={logo.sizes} alt={logo.alt} width={logo.width} height={logo.height} loading="lazy" /><p>{site.about.signature}</p></div></Reveal>
     </div>
   </section>
 }
