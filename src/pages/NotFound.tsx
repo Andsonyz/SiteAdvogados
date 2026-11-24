@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import ArrowLeft from 'lucide-react/icons/arrow-left'
 import { Link } from 'react-router-dom'
 import { site } from '../data/site'
 import { SectionLabel, WhatsAppLink } from '../components/Shared'

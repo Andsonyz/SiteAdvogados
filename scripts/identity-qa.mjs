@@ -16,6 +16,8 @@ async function load(page, path) {
     await document.fonts.ready
     await Promise.all([...document.images].map(async img => { img.loading = 'eager'; await img.decode().catch(() => {}) }))
   })
+  // Static site: settle deferred animation imports before replacing the document.
+  await page.waitForLoadState('networkidle')
 }
 for (const [engine, browserType] of [['chromium', chromium], ['webkit', webkit]]) {
   const browser = await browserType.launch()

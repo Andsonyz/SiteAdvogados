@@ -3,8 +3,9 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.spec.ts',
+  testIgnore: '**/runtime/**',
   fullyParallel: true,
-  workers: 2,
+  workers: 1,
   reporter: 'list',
   use: { baseURL: 'http://127.0.0.1:4173', ...devices['Desktop Chrome'], trace: 'retain-on-failure' },
   projects: [{ name: 'chromium', use: { browserName: 'chromium' } }, { name: 'webkit', use: { browserName: 'webkit' } }],

@@ -54,6 +54,7 @@ Os tokens de cor e degradê estão no início de `src/editorial.css`; as cores b
 - `src/styles.css`: fontes locais, Tailwind e estilos de base.
 - `src/editorial.css`: sistema responsivo único, degradês, tipografia, espaçamento e composições.
 - Serviços aparecem em lista vertical até tablet e em duas colunas no desktop.
+- Os três princípios do atendimento usam uma seção horizontal ilustrada. No desktop com altura suficiente, a rolagem vertical percorre os painéis enquanto a seção permanece fixa temporariamente. No celular, em janelas baixas ou com movimento reduzido, a navegação é horizontal nativa por toque, arraste, botões e teclado. A roda e o toque não são interceptados globalmente.
 - O atendimento tem três etapas com resumos e ilustrações sempre visíveis; os detalhes abrem de forma independente.
 - As oito artes existentes foram mantidas entre as páginas. Os originais estão em `assets/originals/`.
 - As três novas ilustrações ficam em `assets/generated/`, com derivados em `public/images/atendimento-*.webp`. Os prompts e a origem estão em [docs/ilustracoes-mobile.md](docs/ilustracoes-mobile.md).
@@ -64,6 +65,17 @@ Os tokens de cor e degradê estão no início de `src/editorial.css`; as cores b
 Baskervville e Manrope são locais, em WOFF2, com `font-display: swap` e licença OFL nos pacotes Fontsource. O telefone usa Manrope 600 e algarismos alinhados/tabulares. Não existem formulários, e-mail, autenticação, banco de dados, analytics ou armazenamento de dados de visitantes. O contato é exclusivamente pelo WhatsApp; Instagram é um link para o perfil.
 
 ## Verificar a implementação
+
+```sh
+npm run doctor
+npm run verify
+```
+
+`verify` executa o diagnóstico de memória, os testes do inicializador, uma inicialização real do Vite com reconstrução do cache (`--force`), TypeScript, build, testes da marca e a suíte completa com um navegador por vez. `npm run verify:dev` permite repetir apenas o teste de inicialização, abertura e atualização das três páginas. A porta isolada 5191 deve estar livre para essa verificação.
+
+`npm run dev` e o build configuram os pools nativos de Rolldown e Rayon com duas threads antes de carregar o compilador. Valores positivos definidos em `ROLLDOWN_WORKER_THREADS` e `RAYON_NUM_THREADS` são respeitados. Os ícones usam as entradas individuais oficiais do Lucide, evitando pré-processar todo o catálogo. Não é necessário alterar as dependências ou aumentar o heap do Node para aplicar essas mudanças.
+
+Se aparecer `memory allocation ... failed`, `out of memory` ou erro de paginação, execute `npm run doctor`. No Windows, ele mostra RAM livre e memória disponível até o limite de comprometimento, que também depende do arquivo de paginação. A inicialização é interrompida quando a leitura encontra memória crítica; a leitura é apenas uma fotografia do momento e outros aplicativos ainda podem consumir recursos depois dela. Feche aplicativos não utilizados e confira nas configurações do Windows se a paginação é gerenciada pelo sistema. O projeto não altera configurações do sistema nem encerra outros programas. As tentativas anteriores chegaram a apenas 230–280 MB de memória virtual livre; essa situação também interrompeu navegadores e o próprio PowerShell.
 
 ```sh
 npx playwright install chromium webkit
@@ -101,8 +113,20 @@ A auditoria da identidade atual está em [docs/identidade-vinho-2026-11-23.md](d
 
 A revisão posterior de imagens, entrada e rolagem está em [docs/imagens-movimento-scroll-2026-11-23.md](docs/imagens-movimento-scroll-2026-11-23.md). Em máquinas com pouca memória, execute `npx playwright test --workers=1` e as auditorias em sequência. `scripts/identity-qa.mjs` aceita `QA_OUTPUT` para manter relatórios de revisões diferentes. Com a prévia na porta 5187, `node scripts/motion-qa.mjs` gera capturas e uma gravação em `output/motion-refresh/motion/`; também aceita `QA_URL`.
 
+A revisão de textos formais, seção horizontal e inicialização do Vite está em [docs/textos-horizontal-2026-11-24.md](docs/textos-horizontal-2026-11-24.md), com capturas antes/depois, resultados dos testes e limitações. `scripts/horizontal-qa.mjs` verifica roda, retorno, toque emulado, âncoras e janela baixa no build de produção. Use `QA_URL` e `QA_OUTPUT` para escolher a prévia local e a pasta das evidências.
+
+## Transição entre páginas
+
+O conteúdo principal entra pela direita ao abrir serviços e pela esquerda no retorno ao início. O histórico conhecido orienta Voltar/Avançar. A transição usa `motion/mini`, dura 360 ms e termina imediatamente com interação ou preferência por movimento reduzido. Cabeçalho e rodapé permanecem fora da área animada. Acesso direto, atualização e âncoras não iniciam o movimento lateral.
+
+`tests/navigation-transition.spec.ts` cobre direções, histórico, interrupções e tamanhos de tela. Com `npm run preview -- --port 5189 --strictPort` em outro terminal, `node scripts/route-transition-qa.mjs` salva capturas e relatório em `output/route-transition/visual/`; aceita `QA_URL` e `QA_OUTPUT`. Os quadros intermediários são pausados em 100 ms somente para capturas reproduzíveis; os testes de navegação verificam a execução sem pausa. A auditoria também interrompe animações pausadas para comprovar que a interação as conclui, sem depender do término natural dos 360 ms.
+
+O relatório desta entrega está em [docs/transicao-lateral-2026-11-24.md](docs/transicao-lateral-2026-11-24.md).
+
+A [auditoria final](docs/auditoria-final-2026-11-24.md) relaciona cada requisito às evidências, incluindo quatro testes complementares em `tests/completion.spec.ts`, limites reais de textos/controles ampliados e abertura isolada do contato sem enviar mensagens. As novas medições Lighthouse e a conferência final da rolagem estão vinculadas nesse relatório.
+
 ## Conteúdo profissional e limites
 
-Os textos jurídicos aprovados foram preservados. Antes de ampliar critérios de benefícios, confirme em fonte oficial, como a [página do BPC no MDS](https://www.gov.br/mds/pt-br/acoes-e-programas/SUAS/beneficios-assistenciais/beneficio-assistencial-ao-idoso-e-a-pessoa-com-deficiencia-bpc). Não são exibidos endereço, credenciais, valores, prazos ou resultados não confirmados.
+Os títulos legíveis da referência de 24/11 foram incorporados. Os trechos pequenos demais para transcrição foram reescritos com autorização do usuário, em linguagem formal e dentro dos fatos profissionais confirmados. O conteúdo continua centralizado em `src/data/site.ts`. Antes de ampliar critérios de benefícios, confirme em fonte oficial, como a [página do BPC no INSS](https://www.gov.br/inss/pt-br/noticias/como-pedir-beneficio-de-prestacao-continuada-bpc). Não são exibidos endereço, credenciais, valores, prazos ou resultados não confirmados.
 
 Título, descrição, favicon e idioma pt-BR estão configurados, sem inventar domínio canônico. O HTML inicial traz metadados e contato alternativo sem JavaScript; a interface é uma SPA. Publicação, verificação em hospedagem real e a OAB correta continuam para etapa posterior.

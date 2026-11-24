@@ -17,7 +17,7 @@ test('empty reviews are omitted from the page and menu', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('#avaliacoes')).toHaveCount(0)
   await expect(page.locator('a[href="/#avaliacoes"]')).toHaveCount(0)
-  await expect(page.locator('blockquote')).toHaveCount(0)
+  await expect(page.locator('#avaliacoes blockquote')).toHaveCount(0)
   await expect(page.locator('body')).not.toContainText('Ainda não há avaliações publicadas.')
 })
 

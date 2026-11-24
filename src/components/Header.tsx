@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Menu from 'lucide-react/icons/menu'
+import X from 'lucide-react/icons/x'
 import { Link, useLocation } from 'react-router-dom'
 import { site, visibleNavigation, whatsappUrl } from '../data/site'
 import { WhatsAppIcon } from './SocialIcons'
@@ -11,7 +12,7 @@ export default function Header() {
   const button = useRef<HTMLButtonElement>(null)
   const header = useRef<HTMLElement>(null)
   const location = useLocation()
-  useEffect(() => {
+  useLayoutEffect(() => {
     const node = header.current!
     const update = () => document.documentElement.style.setProperty('--header-height', `${node.getBoundingClientRect().height}px`)
     const observer = new ResizeObserver(update)
