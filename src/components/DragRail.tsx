@@ -1,12 +1,14 @@
 import { Children, useEffect, useId, useRef, useState } from 'react'
-import type { PropsWithChildren, PointerEvent, KeyboardEvent } from 'react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import type { PropsWithChildren, PointerEvent, KeyboardEvent, RefObject } from 'react'
+import ArrowLeft from 'lucide-react/icons/arrow-left'
+import ArrowRight from 'lucide-react/icons/arrow-right'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { site } from '../data/site'
 
 /** Native touch scrolling + scroll snap. Mouse capture begins only after a horizontal drag threshold. */
-export default function DragRail({ children, label, className = '' }: PropsWithChildren<{ label: string; className?: string }>) {
-  const viewport = useRef<HTMLDivElement>(null)
+export default function DragRail({ children, label, className = '', viewportRef }: PropsWithChildren<{ label: string; className?: string; viewportRef?: RefObject<HTMLDivElement | null> }>) {
+  const localViewport = useRef<HTMLDivElement>(null)
+  const viewport = viewportRef ?? localViewport
   const pointer = useRef<{ id: number; x: number; y: number; scroll: number; dragging: boolean } | null>(null)
   const suppressClick = useRef(false)
   const [dragging, setDragging] = useState(false)
@@ -15,7 +17,10 @@ export default function DragRail({ children, label, className = '' }: PropsWithC
   const id = useId()
   useEffect(() => {
     const node = viewport.current!
-    const update = () => setScroll({ overflow: node.scrollWidth > node.clientWidth + 3, start: node.scrollLeft < 3, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 3 })
+    const update = () => {
+      const next = { overflow: node.scrollWidth > node.clientWidth + 3, start: node.scrollLeft < 3, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 3 }
+      setScroll(previous => previous.overflow === next.overflow && previous.start === next.start && previous.end === next.end ? previous : next)
+    }
     const observer = new ResizeObserver(update)
     observer.observe(node); observer.observe(node.firstElementChild!)
     node.addEventListener('scroll', update, { passive: true }); update()

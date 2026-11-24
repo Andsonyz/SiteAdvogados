@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import Plus from 'lucide-react/icons/plus'
 import { artwork, site } from '../data/site'
 import Artwork from './Artwork'
 import { AttendanceLocations, Reveal, SectionLabel, WhatsAppLink } from './Shared'

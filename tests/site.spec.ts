@@ -57,7 +57,7 @@ for (const [width, height] of [[360, 640], [390, 844]]) {
       expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(width)
     }
     const title = (await page.locator('#hero-title').boundingBox())!, portrait = (await page.locator('.portrait-composition').boundingBox())!
-    expect(title.x + title.width).toBeLessThanOrEqual(portrait.x)
+    expect(title.y + title.height).toBeLessThanOrEqual(portrait.y)
     expect((await page.locator('.hero-actions .button').boundingBox())!.width).toBeGreaterThanOrEqual(width - 42)
   })
 }
@@ -103,11 +103,15 @@ test('touch menu, FAQ and attendance work without hover; targets remain comforta
   expect(small).toEqual([]); await context.close()
 })
 
-test('keyboard focus remains visible through the entire page', async ({ page }) => {
+test('keyboard focus remains visible through the entire page', async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto('/')
+  await page.evaluate(async () => { await document.fonts.ready; await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))) })
   await page.locator('.skip-link').focus()
-  for (let index = 0; index < 22; index++) {
+  await page.locator('.skip-link').evaluate(el => el.setAttribute('data-qa-focus', 'seen'))
+  let completed = false
+  for (let index = 0; index < 100; index++) {
     await page.keyboard.press('Tab')
+    if (await page.evaluate(() => document.activeElement !== document.body && document.activeElement?.getAttribute('data-qa-focus') === 'seen')) { completed = true; break }
     // WebKit scrolls the newly focused control on the next rendering frame.
     await expect.poll(() => page.evaluate(() => {
       const el = document.activeElement as HTMLElement
@@ -117,10 +121,34 @@ test('keyboard focus remains visible through the entire page', async ({ page }) 
     })).toBe(true)
     const focus = await page.evaluate(() => {
       const el = document.activeElement as HTMLElement; const r = el.getBoundingClientRect(); const css = getComputedStyle(el)
+      el.setAttribute('data-qa-focus', 'seen')
       return { name: el.textContent?.trim(), body: el === document.body, header: !!el.closest('.site-header'), skip: el.classList.contains('skip-link'), top: r.top, bottom: r.bottom, outline: css.outlineStyle, headerBottom: document.querySelector('.site-header')!.getBoundingClientRect().bottom }
     })
     if (focus.body || focus.skip) continue
     expect(focus.outline).not.toBe('none')
     if (!focus.header) { expect(focus.bottom).toBeGreaterThan(focus.headerBottom); expect(focus.top).toBeLessThan(844) }
   }
+  expect(completed).toBe(true)
+  // Windows WebKit omits links from native Tab navigation with its default preference.
+  // Check every omitted link's focus separately; Chromium must reach them through Tab.
+  if (browserName === 'webkit') {
+    for (const link of await page.locator('a[href]').all()) {
+      if (await link.getAttribute('data-qa-focus') === 'seen') continue
+      if (!await link.isVisible()) continue
+      await link.focus()
+      await expect(link).toBeFocused()
+      const state = await link.evaluate(el => {
+        el.setAttribute('data-qa-focus', 'seen')
+        const r = el.getBoundingClientRect()
+        return { outline: getComputedStyle(el).outlineStyle, top: r.top, bottom: r.bottom, inHeader: !!el.closest('.site-header') }
+      })
+      expect(state.outline).not.toBe('none')
+      if (!state.inHeader) { expect(state.bottom).toBeGreaterThan(77); expect(state.top).toBeLessThan(844) }
+    }
+  }
+  const missed = await page.locator('a[href],button:not(:disabled),[tabindex="0"]').evaluateAll(elements => elements.filter(el => {
+    const r = el.getBoundingClientRect()
+    return r.width > 0 && r.height > 0 && el.getAttribute('data-qa-focus') !== 'seen'
+  }).map(el => el.getAttribute('aria-label') || el.textContent?.trim()))
+  expect(missed).toEqual([])
 })

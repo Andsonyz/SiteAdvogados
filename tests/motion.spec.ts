@@ -70,13 +70,14 @@ test('enlarged attendance text keeps whole words when the section has room', asy
   await page.setViewportSize({ width: 320, height: 900 })
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/#atendimento')
-  const title = page.locator('.step-copy h3').nth(1)
+  const title = page.locator('.step-copy h3').nth(2)
   await expect(title).toBeAttached()
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
   const lines = await title.evaluate(el => {
     const range = document.createRange()
-    range.setStart(el.firstChild!, 0)
-    range.setEnd(el.firstChild!, 11) // Compartilhe fits on one line when the illustration yields its space.
+    const start = el.textContent!.indexOf('transparente')
+    range.setStart(el.firstChild!, start)
+    range.setEnd(el.firstChild!, start + 'transparente'.length)
     return range.getClientRects().length
   })
   expect(lines).toBe(1)

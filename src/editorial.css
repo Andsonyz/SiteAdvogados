@@ -8,6 +8,11 @@
   --gradient-sand: linear-gradient(120deg, #ede0d7 0%, #f3eddf 65%, #eadbd3 100%);
 }
 body { background: var(--gradient-light); }
+/* Clip horizontal page arrivals without creating a scrolling ancestor for the sticky journey. */
+#main-content { min-width: 0; overflow-x: clip; overflow-y: visible; }
+.route-transition { min-width: 0; }
+.route-transition[data-route-arrival] :is(.hero-identity,.portrait-composition,.hero-copy,.hero-bottom),
+.route-transition[data-route-arrival] .hero .eyebrow::before { animation: none; }
 .shell { width: min(75rem, calc(100% - 2.5rem)); margin-inline: auto; }
 .section { padding-block: 3.25rem; }
 .site-header { position: sticky; top: 0; z-index: 30; color: var(--ivory); background: var(--wine); border-bottom: 1px solid var(--rule-light); }
@@ -60,17 +65,16 @@ body { background: var(--gradient-light); }
 .hero .eyebrow::before { content: ''; position: absolute; top: -.5rem; left: 0; width: 2rem; height: 1px; background: #e6c4b2; transform-origin: left; animation: opening-rule 600ms ease-out both; }
 .hero .eyebrow { position: relative; }
 
-/* The name and portrait share the first row. No fixed hero height or text overlays. */
+/* The formal headline gets its own mobile row; portrait and introduction share the next. */
 .hero { color: var(--ivory); background: var(--gradient-dark); overflow: clip; }
-.hero-layout { display: flex; flex-wrap: wrap; gap: 0 .5rem; padding-block: 1.25rem 1.5rem; }
-.hero-identity { flex: 1 1 8rem; grid-area: identity; align-self: center; position: relative; z-index: 2; padding-block: .5rem; }
-.hero-identity .eyebrow { font-size: .75rem; letter-spacing: .08em; gap: 0; max-width: 18ch; margin-bottom: .875rem; }
+.hero-layout { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); grid-template-areas: 'identity identity' 'copy portrait' 'actions actions' 'bottom bottom'; gap: .75rem; padding-block: 1.25rem 1.5rem; }
+.hero-identity { grid-area: identity; align-self: start; position: relative; z-index: 2; padding: 0; }
+.hero-identity .eyebrow { font-size: .75rem; letter-spacing: .06em; gap: 0; max-width: none; margin-bottom: .75rem; }
 .hero-identity .eyebrow > span { display: none; }
-.hero h1 { font-size: clamp(2.75rem, 1.8rem + 4vw, 3.25rem); line-height: 1.04; max-width: none; }
-.hero h1 > span { display: block; }
+.hero h1 { font-size: clamp(1.875rem, 1.65rem + .9vw, 2.25rem); line-height: 1.08; max-width: 24ch; }
 .hero-specialty { margin-top: .875rem; font-size: .875rem; color: var(--light-muted); line-height: 1.5; }
-.portrait-composition { flex: 1 1 8rem; grid-area: portrait; min-height: 13.75rem; position: relative; overflow: hidden; mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%); }
-.hero-portrait { position: absolute; top: 0; right: 0; width: 150%; max-width: none; height: auto; }
+.portrait-composition { grid-area: portrait; min-height: 9rem; position: relative; overflow: hidden; mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%); }
+.hero-portrait { position: absolute; top: 0; right: 0; width: 135%; max-width: none; height: auto; }
 @supports (mask-composite: intersect) {
   .portrait-composition {
     mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%), linear-gradient(to right, #000 0%, #000 95%, transparent 100%);
@@ -78,11 +82,11 @@ body { background: var(--gradient-light); }
   }
 }
 .portrait-fallback { grid-area: portrait; align-self: center; text-align: center; font: 5rem var(--font-serif); color: var(--ivory); }
-.hero-copy { flex: 1 1 100%; grid-area: copy; margin-top: .5rem; }
-.hero-description { font-size: 1.0625rem; color: var(--ivory); line-height: 1.6; max-width: 38ch; }
-.hero-actions { margin-top: 1.125rem; }
+.hero-copy { grid-area: copy; align-self: center; margin: 0; }
+.hero-description { font-size: .9375rem; color: var(--ivory); line-height: 1.6; max-width: 38ch; }
+.hero-actions { grid-area: actions; margin: 0; }
 .hero-actions .button { width: 100%; }
-.hero-bottom { flex: 1 1 100%; grid-area: bottom; border-top: 1px solid var(--rule-light); margin-top: 1.25rem; padding-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .875rem; }
+.hero-bottom { grid-area: bottom; border-top: 1px solid var(--rule-light); margin-top: .25rem; padding-top: .875rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .875rem; }
 .hero-bottom .locations { color: var(--light-muted); }
 .hero-bottom .locations svg { color: var(--ivory); }
 .experience { display: flex; align-items: baseline; gap: .5rem; }
@@ -98,6 +102,7 @@ body { background: var(--gradient-light); }
 .about-heading h2 { font-size: clamp(1.875rem, 1.6rem + 1.5vw, 3.5rem); }
 .about-side-note { font-size: .875rem; color: var(--muted); margin-top: 1rem; }
 .about-books { grid-column: 2; grid-row: 1 / 4; width: 100%; }
+.about-heading .about-quote { grid-column: 1 / -1; background: var(--wine); color: var(--ivory); font: italic 1.0625rem/1.5 var(--font-serif); padding: 1.125rem; margin-top: 1.25rem; }
 .about-copy { color: var(--ink); }
 .about-copy > p + p { margin-top: 1rem; }
 .about-signoff { display: grid; grid-template-columns: 6rem minmax(0,1fr); align-items: center; gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
@@ -114,6 +119,30 @@ body { background: var(--gradient-light); }
 .service-category { font-size: .75rem; letter-spacing: .04em; color: var(--wine); }
 .service-card h3 { font: 400 1.875rem/1.15 var(--font-serif); margin-block: .625rem .875rem; }
 .service-description { color: var(--ink); margin-bottom: 1rem; }
+.service-highlights { padding-left: 1.125rem; margin: 0 0 1.25rem; font-size: .9375rem; line-height: 1.7; }
+.service-highlights li + li { margin-top: .25rem; }
+.service-highlights li::marker { color: var(--wine); }
+.footer-disclaimer { font-size: .875rem; color: var(--light-muted); text-align: center; padding-bottom: 1.5rem; }
+
+/* One horizontal editorial sequence; every panel remains in the native scroll container. */
+.journey-section { background: var(--gradient-light); }
+.horizontal-journey { --journey-progress: 0; --journey-top: 6rem; position: relative; min-width: 0; }
+.journey-sticky { min-width: 0; }
+.horizontal-journey.is-scroll-driven .journey-sticky { position: sticky; top: var(--journey-top); }
+.journey-rail .rail-viewport { scroll-snap-type: x proximity; scroll-padding-inline: 0; padding-inline: 0; }
+.journey-rail .rail-track { position: relative; gap: 1.5rem; align-items: stretch; }
+.journey-rail .rail-item { flex-basis: 88%; }
+.journey-panel { height: 100%; min-width: 0; padding: 1.5rem; background: var(--gradient-dark); color: var(--ivory); display: flex; flex-direction: column; gap: 1.25rem; }
+.journey-panel-2 { background: var(--gradient-sand); color: var(--ink); }
+.journey-copy { min-width: 0; }
+.journey-position { display: block; font-size: .75rem; letter-spacing: .1em; margin-bottom: 1.25rem; }
+.journey-panel h3 { font: 400 1.875rem/1.12 var(--font-serif); margin-bottom: .875rem; }
+.journey-panel p { font-size: 1rem; line-height: 1.65; }
+.journey-art { width: min(100%,12.5rem); align-self: center; margin-top: auto; }
+.journey-art img { max-height: 8rem; }
+.journey-progress { height: 2px; background: var(--rule); margin-top: 1rem; overflow: hidden; }
+.journey-progress > span { display: block; height: 100%; background: var(--wine); transform: scaleX(var(--journey-progress)); transform-origin: left; }
+.horizontal-journey.is-scroll-driven .rail-viewport { scroll-snap-type: none; }
 .attendance-heading { display: grid; gap: 1rem; margin-bottom: 1.75rem; }
 .attendance-illustrated { display: flex; align-items: center; gap: 1rem; }
 .attendance-illustrated .section-intro { margin: 0; min-width: 0; }
@@ -236,7 +265,7 @@ body { background: var(--gradient-light); }
 @media (max-width: 359px) {
   .shell { width: calc(100% - 2rem); }
   .hero-identity .eyebrow { font-size: .75rem; }
-  .portrait-composition { min-height: 13rem; }
+  .portrait-composition { min-height: 9rem; }
 }
 @media (min-width: 640px) {
   .shell { width: min(75rem,calc(100% - 4rem)); }
@@ -244,12 +273,11 @@ body { background: var(--gradient-light); }
   .brand-logo { width: 9rem; }
   .header-inner { min-height: 5rem; }
   .navigation { max-height: calc(100dvh - var(--header-height, 5rem)); padding-inline: 2rem; }
-  .hero-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); grid-template-areas: 'identity portrait' 'copy portrait' 'bottom bottom'; column-gap: 1.5rem; padding-top: 3rem; }
+  .hero-layout { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); grid-template-areas: 'identity portrait' 'copy portrait' 'actions portrait' 'bottom bottom'; column-gap: 1.5rem; row-gap: 1.125rem; padding-top: 3rem; }
   .hero-identity .eyebrow { max-width: none; }
-  .hero h1 { font-size: clamp(3.5rem, 1rem + 6.5vw, 7rem); max-width: none; }
-  .hero h1 > span { display: inline; }
+  .hero h1 { font-size: clamp(2.5rem, 1.3rem + 2.4vw, 4.5rem); max-width: 20ch; }
   .hero-specialty { font-size: 1rem; }
-  .hero-copy { margin-top: 1.25rem; margin-bottom: 2rem; }
+  .hero-copy { margin: 0; }
   .hero-description { font-size: 1.125rem; }
   .portrait-composition { min-height: 25rem; }
   .hero-portrait { width: 135%; }
@@ -260,6 +288,11 @@ body { background: var(--gradient-light); }
   .about-signoff { grid-template-columns: 7rem minmax(0,1fr); }
   .about-logo { width: 7rem; }
   .about-books { position: static; width: 10rem; margin-top: 1.5rem; }
+  .journey-rail .rail-item { flex-basis: 85%; }
+  .journey-panel { padding: 2rem; }
+  .journey-panel h3 { font-size: 2.5rem; }
+  .journey-art { width: 20rem; }
+  .journey-art img { max-height: 13rem; }
   .faq-grid { grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 2.5rem; }
   .faq-heading { display: block; }
   .faq-art { position: static; width: 6rem; margin-top: 1.5rem; }
@@ -291,7 +324,6 @@ body { background: var(--gradient-light); }
   .shell { width: min(75rem,calc(100% - 7rem)); }
   .section { padding-block: 5.5rem; }
   .hero-layout { padding-top: 4rem; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); }
-  .hero-copy { margin-block: 1.5rem 3rem; }
   .hero-description { font-size: 1.25rem; }
   .hero-identity .eyebrow { gap: .75rem; }
   .hero-identity .eyebrow > span { display: block; }
@@ -304,6 +336,12 @@ body { background: var(--gradient-light); }
   .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 3rem; margin-bottom: 2.5rem; }
   .section-heading .section-intro { margin: 0; }
   .services-list { grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .hero h1 { font-size: clamp(3.4rem, 1.7rem + 2.6vw, 4.5rem); }
+  .journey-rail .rail-item { flex-basis: 100%; }
+  .journey-panel { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 3rem; padding: 3rem; min-height: 25rem; }
+  .journey-panel h3 { font-size: clamp(2.5rem,3.5vw,3.5rem); }
+  .journey-art { width: 100%; max-width: 30rem; margin-top: 0; }
+  .journey-art img { max-height: 18rem; }
   .service-card-visual { height: 8rem; }
   .service-illustration { width: 12rem; }
   .service-illustration img { max-height: 8rem; }

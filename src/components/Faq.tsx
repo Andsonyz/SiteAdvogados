@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { m as motion } from 'motion/react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
-import { Plus } from 'lucide-react'
+import Plus from 'lucide-react/icons/plus'
 import { artwork, site } from '../data/site'
 import Artwork from './Artwork'
 import { Reveal, SectionLabel } from './Shared'
